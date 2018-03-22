@@ -1,0 +1,47 @@
+$item-card-border: 1px solid #000;
+
+
+* { 
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 16px;
+}
+
+.lootboxes {
+    padding: 1rem;
+}
+
+.loot-list {
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.loot-item {
+    flex: 1 0 300px;
+    padding: 1rem;
+
+    .item-label {
+        font-size: 1.1rem;
+        text-align: center;
+        margin: 0 0 0.5rem;
+    }
+}
+
+.item-card {
+    border: $item-card-border;
+    padding: 1rem;
+    .item-name {
+        font-size: 1.5rem;
+        margin: 0 0 0.75rem;
+    }
+
+    .item-desc {
+        margin: 0;
+    }
+}
