@@ -1,10 +1,32 @@
 import React, { Component } from "react";
+import LootTableHeads from "./LootTableHeads";
 
 class Lootboxes extends Component {
     constructor(props){
         super(props);
         this.handleOpenBoxes = this.handleOpenBoxes.bind(this);
+        // this is a super basic version of the loot table. 
+        // Currently each tier is represented by the position in the array. Each item's statblock object is
+        // in each tier
+        this.lootTableHeads = LootTableHeads;  
     }
+
+    buildNewItem(item){
+        item["type"] = this.getItemType();
+        item["variation"] = this.rolldice(10);
+        // These entries will eventually be values in a loot table look up based on type and
+        // variation. For now just filling them with placeholders.
+        item["name"] = `Tier ${item.tier} ${item.type}_${item.variation}`;
+        item["desc"] = `An ${item.name} of immense undefined power`;
+        if(item.type === "mount"){
+            item["mountHead"] = "naked";
+            item["mountBody"] = "naked";
+            item["mountFeet"] = "naked";
+            item["mountPet"] = "naked";
+        }
+        return item;
+    }
+
     generateBoxes() {
         // generate the items in the box
         const item1 = this.rolldice(10000),
@@ -17,7 +39,7 @@ class Lootboxes extends Component {
         // evaluate each item based on it's loot table
         const lootbox = [];
         {
-            let item = {};
+            let item = { "equipped" : false };
             // item1 loot table
             if (item1 >= 1 && item1 < 328) {
                 item["tier"] = 3;
@@ -34,11 +56,10 @@ class Lootboxes extends Component {
             else {
                 item["tier"] = 7;
             }
-            item["type"] = this.getItemType();
-            lootbox.push(item);
+            lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = {};
+            let item = { "equipped" : false };
             // item2 loot table
             if (item2 >= 1 && item2 < 10) {
                 item["tier"] = 2;
@@ -52,11 +73,10 @@ class Lootboxes extends Component {
             else {
                 item["tier"] = 5;
             }
-            item["type"] = this.getItemType();
-            lootbox.push(item);
+            lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = {};
+            let item = { "equipped" : false };
             // item3 loot table
             if (item3 >= 1 && item3 < 2982) {
                 item["tier"] = 6;
@@ -64,11 +84,10 @@ class Lootboxes extends Component {
             else {
                 item["tier"] = 7;
             }
-            item["type"] = this.getItemType();
-            lootbox.push(item);
+            lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = {};
+            let item = { "equipped" : false };
             // item4 loot table
             if (item4 >= 1 && item4 < 1002) {
                 item["tier"] = 6;
@@ -76,11 +95,10 @@ class Lootboxes extends Component {
             else {
                 item["tier"] = 7;
             }
-            item["type"] = this.getItemType();
-            lootbox.push(item);
+            lootbox.push(this.buildNewItem(item));
         }
         if (bonus) {
-            let item = {};
+            let item = { "equipped" : false };
             if (bonus >= 1 && bonus < 145) {
                 item["tier"] = 1;
             }
@@ -93,8 +111,7 @@ class Lootboxes extends Component {
             else {
                 item["tier"] = 4;
             }
-            item["type"] = this.getItemType();
-            lootbox.push(item);
+            lootbox.push(this.buildNewItem(item));
         }
 
         return lootbox;
@@ -114,71 +131,52 @@ class Lootboxes extends Component {
         // Roll a d200 to figure out which type, this will probably need to change once there are
         // actual items in each one? Maybe I can just switch on lootType % 10 to get the specifics?
         // TBD.
-        const lootType = this.rolldice(200);
-        var item;
-
-        if (lootType >= 1 && lootType < 11) {
-            item = `Head_${lootType % 10}`;
-        }
-        else if (lootType >= 11 && lootType < 21) {
-            item = `Hands_${lootType % 10}`;
-        }
-        else if (lootType >= 21 && lootType < 31) {
-            item = `Shoulders_${lootType % 10}`;
-        }
-        else if (lootType >= 31 && lootType < 41) {
-            item = `Chest_${lootType % 10}`;
-        }
-        else if (lootType >= 41 && lootType < 51) {
-            item = `Legs_${lootType % 10}`;
-        }
-        else if (lootType >= 51 && lootType < 61) {
-            item = `Knees_${lootType % 10}`;
-        }
-        else if (lootType >= 61 && lootType < 71) {
-            item = `Feet_${lootType % 10}`;
-        }
-        else if (lootType >= 71 && lootType < 81) {
-            item = `Meck_${lootType % 10}`;
-        }
-        else if (lootType >= 81 && lootType < 91) {
-            item = `Finger_1_${lootType % 10}`;
-        }
-        else if (lootType >= 91 && lootType < 101) {
-            item = `Finger_2_${lootType % 10}`;
-        }
-        else if (lootType >= 101 && lootType < 111) {
-            item = `Left_Back_Pocket_${lootType % 10}`;
-        }
-        else if (lootType >= 111 && lootType < 121) {
-            item = `Backpack_${lootType % 10}`;
-        }
-        else if (lootType >= 121 && lootType < 131) {
-            item = `Companion_pet_${lootType % 10}`;
-        }
-        else if (lootType >= 131 && lootType < 141) {
-            item = `Weapon_main_${lootType % 10}`;
-        }
-        else if (lootType >= 141 && lootType < 151) {
-            item = `Weapon_off_${lootType % 10}`;
-        }
-        else if (lootType >= 151 && lootType < 161) {
-            item = `Mount_${lootType % 10}`;
-        }
-        else if (lootType >= 161 && lootType < 171) {
-            item = `Mount_head_${lootType % 10}`;
-        }
-        else if (lootType >= 171 && lootType < 181) {
-            item = `Mount_body_${lootType % 10}`;
-        }
-        else if (lootType >= 181 && lootType < 191) {
-            item = `Mount_feet_${lootType % 10}`;
-        }
-        else {
-            item = `Mount_pet_${lootType % 10}`;
-        }
-
-        return item;
+        const lootType = this.rolldice(20);
+        
+        switch(lootType){
+        case 1: 
+            return "head";
+        case 2:
+            return "hands";
+        case 3:
+            return "shoulders";
+        case 4:
+            return "chest";  
+        case 5:
+            return "legs";
+        case 6:
+            return "knees";
+        case 7:
+            return "feet";
+        case 8:
+            return "neck";
+        case 9:
+            return "finger1";
+        case 10:
+            return "finger2";
+        case 11:
+            return "lbPocket";
+        case 12:
+            return "backpack";
+        case 13:
+            return "companion";
+        case 14:
+            return "weaponMain";
+        case 15:
+            return "weaponOff";
+        case 16:
+            return "mount";
+        case 17:
+            return "mountHead";
+        case 18:
+            return "mountBody";
+        case 19:
+            return "mountFeet";
+        case 20:
+            return "mountPet";
+        default:
+            return undefined;
+        }        
     }
 
     rolldice(dice) {
@@ -207,8 +205,8 @@ class Lootboxes extends Component {
                             <li className="loot-item" key={`item_${index}`}>
                                 <h2 className="item-label">{`Item ${index + 1}`}</h2>
                                 <div className="item-card">
-                                    <h3 className="item-name">{item.type}</h3>
-                                    <p className="item-desc">{`This is a fancy new Tier ${item.tier} ${item.type}. Lucky!`}</p>
+                                    <h3 className="item-name">{`${item.type} ${item.variation}`}</h3>
+                                    <p className="item-desc">{`This is a fancy new Tier ${item.tier} ${item.type} ${item.variation}. Lucky!`}</p>
                                 </div>
                             </li>
                         );
