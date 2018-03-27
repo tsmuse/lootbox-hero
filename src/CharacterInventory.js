@@ -10,7 +10,8 @@ function InventoryItem(props){
                 data-item-index={props.lootID} disabled={props.equipDisabled}>
                 Equip
             </button>
-            <button className="inventory-junk-btn" data-item-index={props.lootIndex} >
+            <button className="inventory-junk-btn" onClick={props.handleJunkButton}
+                data-item-index={props.lootID} >
                 Junk
             </button>
         </li>
@@ -20,10 +21,15 @@ class CharacterInventory extends Component {
     constructor(props){
         super(props);
         this.handleEquipButton = this.handleEquipButton.bind(this);
+        this.handleJunkButton = this.handleJunkButton.bind(this);
     }
 
     handleEquipButton(e){
         this.props.equipItemHandler(e.currentTarget.dataset.itemIndex);
+    }
+
+    handleJunkButton(e){
+        this.props.junkItemHandler(e.currentTarget.dataset.itemIndex);
     }
 
     shouldDisable(loot, mountEquipped){
@@ -34,9 +40,9 @@ class CharacterInventory extends Component {
 
     filterForRender(loot){
         var lootToRender = [];
-        for (let item of loot) {
-            if (!item.equipped) {
-                lootToRender.push(item);
+        for (let item in loot) {
+            if (!loot[item].equipped) {
+                lootToRender.push(loot[item]);
             }
         }
         return lootToRender;
@@ -54,6 +60,7 @@ class CharacterInventory extends Component {
                                 lootName={loot.name}
                                 lootID={loot.id}
                                 handleEquipButton={this.handleEquipButton}
+                                handleJunkButton={this.handleJunkButton}
                                 equipDisabled={this.shouldDisable(loot, this.props.mountEquipped)}
                             />); 
                         })

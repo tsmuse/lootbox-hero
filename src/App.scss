@@ -14,7 +14,9 @@ body {
 }
 
 @import 'Lootboxes';
-
+.character-sheet {
+    padding: 1rem 2rem;
+}
 .stats-block {
     display: inline-block;
     vertical-align: top;

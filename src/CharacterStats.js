@@ -5,6 +5,26 @@ class CharacterStats extends Component {
     render(){
         return (
             <section className="stats-block">
+                <h2 className="stats-label">Score</h2>
+                <p className="score">{this.props.playerScore}</p>
+                <h2 className="stats-label">Monies</h2>
+                <table className="stat-table">
+                    <tbody>
+                        <tr className=" stat-row">
+                            <td className="stat-label">Unopened LootBoxes</td>
+                            <td className="stat-value">{this.props.playerUnopenedBoxes}</td>
+                        </tr>
+                        <tr className=" stat-row">
+                            <td className="stat-label">Cash</td>
+                            <td className="stat-value">{this.props.playerCash}</td>
+                        </tr>
+                        <tr className=" stat-row">
+                            <td className="stat-label">CrateCash<sup>tm</sup></td>
+                            <td className="stat-value">{this.props.playerCrateCash}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h2 className="stats-label">Abilities</h2>
                 <table className="stat-table">
                     <tbody>
                         <tr className="stat-row">

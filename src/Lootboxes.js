@@ -33,7 +33,7 @@ class Lootboxes extends Component {
         // evaluate each item based on it's loot table
         const lootbox = [];
         {
-            let item = { "equipped" : false };
+            let item = {};
             // item1 loot table
             if (item1 >= 1 && item1 < 328) {
                 item["tier"] = 3;
@@ -53,7 +53,7 @@ class Lootboxes extends Component {
             lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = { "equipped" : false };
+            let item = {};
             // item2 loot table
             if (item2 >= 1 && item2 < 10) {
                 item["tier"] = 2;
@@ -70,7 +70,7 @@ class Lootboxes extends Component {
             lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = { "equipped" : false };
+            let item = {};
             // item3 loot table
             if (item3 >= 1 && item3 < 2982) {
                 item["tier"] = 6;
@@ -81,7 +81,7 @@ class Lootboxes extends Component {
             lootbox.push(this.buildNewItem(item));
         }
         {
-            let item = { "equipped" : false };
+            let item = {};
             // item4 loot table
             if (item4 >= 1 && item4 < 1002) {
                 item["tier"] = 6;
@@ -92,7 +92,7 @@ class Lootboxes extends Component {
             lootbox.push(this.buildNewItem(item));
         }
         if (bonus) {
-            let item = { "equipped" : false };
+            let item = {};
             if (bonus >= 1 && bonus < 145) {
                 item["tier"] = 1;
             }
@@ -113,6 +113,7 @@ class Lootboxes extends Component {
 
     buildNewItem(item) {
         item["id"] = this.lootID.next().value;
+        item["equipped"] = false;
         item["type"] = this.getItemType();
         item["variation"] = this.rolldice(10);
         // These entries will eventually be values in a loot table look up based on type and
@@ -213,7 +214,17 @@ class Lootboxes extends Component {
         var boxToRender = this.props.lastBox;
         return (
             <section className="lootboxes">
-                <button className="open-boxes-btn" onClick={this.handleOpenBoxes}>Open Boxes</button>
+                <div className="lootboxes-button-group">
+                    <button className="open-boxes-btn" onClick={this.handleOpenBoxes} 
+                        disabled={this.props.playerUnopenedBoxes === 0} >
+                        Open Boxes
+                    </button>
+                    <button className="buy-boxes-btn" 
+                        onClick={this.props.buyLootboxHandler} 
+                        disabled={this.props.playerCash < 3}> 
+                            Buy Box
+                    </button>
+                </div>
                 <ul className="loot-list">
                     {boxToRender.map(function (item, index) {
                         return (
