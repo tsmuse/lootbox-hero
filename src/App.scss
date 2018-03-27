@@ -19,17 +19,20 @@ body {
     display: inline-block;
     vertical-align: top;
     margin-right: 1rem;
+    min-width: 350px;
 }
 
 .equipped-items {
     display: inline-block;
     vertical-align: top;
     margin-right: 1rem;
+    min-width: 350px;
 }
 .inventory {
     padding:1.5rem;
     border: $item-card-border;
     display: inline-block;
-    max-height: 300px;
+    max-height: 600px;
     overflow-y: scroll;
+    min-width: 350px;
 }

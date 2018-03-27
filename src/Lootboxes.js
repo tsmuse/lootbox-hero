@@ -1,32 +1,26 @@
 import React, { Component } from "react";
-import LootTableHeads from "./LootTableHeads";
+import LootTable from "./config/LootTable";
+
 
 class Lootboxes extends Component {
     constructor(props){
         super(props);
         this.handleOpenBoxes = this.handleOpenBoxes.bind(this);
-        // this is a super basic version of the loot table. 
+        // this is a super basic version of the loot tables. Most Likely will end up in the backend
+        // as an API to call, but for now this is what it is. 
         // Currently each tier is represented by the position in the array. Each item's statblock object is
         // in each tier
-        this.lootTableHeads = LootTableHeads;  
+        this.lootTable = LootTable; 
+        this.lootID = this.generateLootIDs();
     }
-
-    buildNewItem(item){
-        item["type"] = this.getItemType();
-        item["variation"] = this.rolldice(10);
-        // These entries will eventually be values in a loot table look up based on type and
-        // variation. For now just filling them with placeholders.
-        item["name"] = `Tier ${item.tier} ${item.type}_${item.variation}`;
-        item["desc"] = `An ${item.name} of immense undefined power`;
-        if(item.type === "mount"){
-            item["mountHead"] = "naked";
-            item["mountBody"] = "naked";
-            item["mountFeet"] = "naked";
-            item["mountPet"] = "naked";
+    *generateLootIDs(){
+        var seed = 0;
+        while(true){
+            yield seed;
+            seed ++;
         }
-        return item;
+        
     }
-
     generateBoxes() {
         // generate the items in the box
         const item1 = this.rolldice(10000),
@@ -117,6 +111,25 @@ class Lootboxes extends Component {
         return lootbox;
     }
 
+    buildNewItem(item) {
+        item["id"] = this.lootID.next().value;
+        item["type"] = this.getItemType();
+        item["variation"] = this.rolldice(10);
+        // These entries will eventually be values in a loot table look up based on type and
+        // variation. For now just filling them with placeholders.
+        item["name"] = this.lootTable[item.type][item.tier][item.variation].name;
+        item["desc"] = this.lootTable[item.type][item.tier][item.variation].desc;
+        item["stats"] = this.lootTable[item.type][item.tier][item.variation].stats;
+        item["set"] = this.lootTable[item.type][item.tier][item.variation].set;
+        if (item.type === "mount") {
+            item["mountHead"] = "naked";
+            item["mountBody"] = "naked";
+            item["mountFeet"] = "naked";
+            item["mountPet"] = "naked";
+        }
+        return item;
+    }
+
     getItemType() {
         // this will eventually need to be blown out into a full fledged loot table
         // right now it's just going to spit out the item type plus the number 1-10 of that
@@ -150,10 +163,12 @@ class Lootboxes extends Component {
             return "feet";
         case 8:
             return "neck";
+        // There are two fingers here because there are two finger slots on the character and every
+        // slot has an equal chance of coming up by design
         case 9:
-            return "finger1";
+            return "finger";
         case 10:
-            return "finger2";
+            return "finger";
         case 11:
             return "lbPocket";
         case 12:
@@ -205,8 +220,8 @@ class Lootboxes extends Component {
                             <li className="loot-item" key={`item_${index}`}>
                                 <h2 className="item-label">{`Item ${index + 1}`}</h2>
                                 <div className="item-card">
-                                    <h3 className="item-name">{`${item.type} ${item.variation}`}</h3>
-                                    <p className="item-desc">{`This is a fancy new Tier ${item.tier} ${item.type} ${item.variation}. Lucky!`}</p>
+                                    <h3 className="item-name">{item.name}</h3>
+                                    <p className="item-desc">{item.desc}</p>
                                 </div>
                             </li>
                         );
