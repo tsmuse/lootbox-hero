@@ -1,95 +1,98 @@
 import React, { Component } from "react";
 
-function MountEquipment(props) {
-    return (
-        <React.Fragment>
-            <h3 className="mount-slot">Type</h3>
-            <p className="equipped-item">{props.playerMount.type}</p>
-            <h3 className="mount-slot">Head</h3>
-            <p className="equipped-item">{props.playerMount.mountHead.name}</p>
-            <h3 className="mount-slot">Body</h3>
-            <p className="equipped-item">{props.playerMount.mountBody.name}</p>
-            <h3 className="mount-slot">Feet</h3>
-            <p className="equipped-item">{props.playerMount.mountFeet.name}</p>
-            <h3 className="mount-slot">Pet</h3>
-            <p className="equipped-item">{props.playerMount.mountPet.name}</p>
-        </React.Fragment>
-    );
+function MountSlot(props){
+    if(props.mount.equipped){
+        return(
+            <div className="equipment-slot mount">
+                <h2 className="slot-title">{props.title}</h2>
+                <EquipmentSlot title="Head" item={props.mount.mountHead}
+                    handleUnequipButton={props.handleUnequipButton} />
+                <EquipmentSlot title="Body" item={props.mount.mountBody}
+                    handleUnequipButton={props.handleUnequipButton} />
+                <EquipmentSlot title="Feet" item={props.mount.mountFeet}
+                    handleUnequipButton={props.handleUnequipButton} />
+                <EquipmentSlot title="Pet" item={props.mount.mountPet}
+                    handleUnequipButton={props.handleUnequipButton} />
+            </div>
+        );
+    }
+    else {
+        return (
+            <div className="equipment-slot mount">
+                <h2 className="slot-title">{props.title}</h2>
+                <p className="equipped-item">No mount equipped</p>
+            </div>
+        );
+    }
+}
+
+function EquipmentSlot(props){
+    if(props.item !== "naked"){
+        return (
+            <div className="equipment-slot">
+                <h2 className="slot-title">{props.title}</h2>
+                <p className="equipped-item">{props.item.name}</p>
+                <button className="equipped-uneqp-btn" onClick={props.handleUnequipButton} 
+                    data-item-index={props.item.id} >
+                    Unequip
+                </button>
+            </div>
+        );
+    }
+    else {
+        return (
+            <div className="equipment-slot">
+                <h2 className="slot-title">{props.title}</h2>
+                <p className="equipped-item">{props.item}</p>
+            </div>
+        );
+    }
 }
 
 class CharacterEquipped extends Component{
+    constructor(props){
+        super(props);
+        this.handleUnequipButton = this.handleUnequipButton.bind(this);
+    }
 
+    handleUnequipButton(e){
+        this.props.unequipItemHandler(e.currentTarget.dataset.itemIndex);
+    }
     render(){
         return (
             <section className="equipped-items">
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Head</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.head.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Hands</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.hands.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Shoulders</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.shoulders.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Chest</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.chest.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Legs</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.legs.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Knees</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.knees.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Feet</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.feet.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Neck</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.neck.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Finger 1</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.finger1.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Finger 2</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.finger2.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Left back pocket </h2>
-                    <p className="equipped-item">{this.props.playerEquipped.lbPocket.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Backpack</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.backpack.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Companion pet</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.companion.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Main-hand</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.weaponMain.name}</p>
-                </div>
-                <div className="equipment-slot">
-                    <h2 className="slot-title">Off-hand</h2>
-                    <p className="equipped-item">{this.props.playerEquipped.weaponOff.name}</p>
-                </div>
-                <div className="equipment-slot mount">
-                    <h2 className="slot-title">Mount</h2>
-                    {
-                        this.props.playerMount.equipped
-                            ? <MountEquipment playerMount={this.props.playerMount} /> 
-                            : <p className="equipped-itme">None</p>
-                    }
-                </div>
+                <EquipmentSlot title="Head" item={this.props.playerEquipped.head} 
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Hands" item={this.props.playerEquipped.hands}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Shoulders" item={this.props.playerEquipped.shoulders}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Chest" item={this.props.playerEquipped.chest}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Legs" item={this.props.playerEquipped.legs}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Knees" item={this.props.playerEquipped.knees}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Feet" item={this.props.playerEquipped.feet}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Neck" item={this.props.playerEquipped.neck}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Finger 1" item={this.props.playerEquipped.finger1}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Finger 2" item={this.props.playerEquipped.finger2}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Left back pocket" item={this.props.playerEquipped.lbPocket}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="backpack" item={this.props.playerEquipped.backpack}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Companion" item={this.props.playerEquipped.companion}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Main-hand" item={this.props.playerEquipped.weaponMain}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <EquipmentSlot title="Off-hand" item={this.props.playerEquipped.weaponOff}
+                    handleUnequipButton={this.handleUnequipButton} />
+                <MountSlot title="Mount" mount={this.props.playerMount} 
+                    handleUnequipButton={this.handleUnequipButton} />
             </section>
         );
     }
