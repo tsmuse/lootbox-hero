@@ -75,14 +75,20 @@ class App extends Component {
     }
     // This load will need to go into a login screen of some kind, but for now putting it here
     componentDidMount() {
-        console.log(this.state.isLoaded);
-        if(!this.state.isLoaded){
-            const loadPlayer = fetch("http://localhost:3000/stubs/playerStub.json"),
-                loadBaseStats = fetch("http://localhost:3000/stubs/baseAbilitiesStub.json");
+        
+        if(localStorage.getItem("player")){
+            // alert("premount: " + JSON.stringify(this.state.player));
+            // alert("mount: " + localStorage.getItem("player"));
+            this.setState({"player" : JSON.parse(localStorage.getItem("player")), isLoaded:true});
+        }
+        else {
+            const loadPlayer = fetch("http://localhost:3000/stubs/playerStub.json");
+                // loadBaseStats = fetch("http://localhost:3000/stubs/baseAbilitiesStub.json");
 
             loadPlayer.then(result => result.json())
                 .then(
                     (result) => {
+                        localStorage.setItem("player",JSON.stringify(result));
                         this.setState({
                             "player": result
                         });
@@ -96,28 +102,39 @@ class App extends Component {
                         });
                     }
                 )
-                .then(() => loadBaseStats)
-                .then(result => result.json())
-                .then(
-                    (result) => {
-                        this.setState({
-                            "BASE_ABILITIES": result
-                        });
-                    },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
-                    (error) => {
-                        this.setState({
-                            error
-                        });
-                    }
-                )
+                // .then(() => loadBaseStats)
+                // .then(result => result.json())
+                // .then(
+                //     (result) => {
+                //         this.setState({
+                //             "BASE_ABILITIES": result
+                //         });
+                //     },
+                //     // Note: it's important to handle errors here
+                //     // instead of a catch() block so that we don't swallow
+                //     // exceptions from actual bugs in components.
+                //     (error) => {
+                //         this.setState({
+                //             error
+                //         });
+                //     }
+                // )
                 .then(() => {
                     this.setState({ "isLoaded": true });
                 });
         }   
     }
+    componentDidUpdate(){
+        // alert("updating" + JSON.stringify(this.state.player));
+        const currentState = JSON.stringify(this.state.player);
+        if(localStorage.getItem("player") !== currentState)
+            localStorage.setItem("player", currentState);
+    }
+    componentWillUnmount(){
+        // alert("unmount: " + JSON.stringify(this.state.player));
+        localStorage.setItem("player", JSON.stringify(this.state.player));
+    }
+
     render(){
         const { error, isLoaded, player } = this.state;
         if(error){
