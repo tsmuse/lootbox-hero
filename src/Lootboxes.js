@@ -31,7 +31,7 @@ class Lootboxes extends Component {
 
 
         // evaluate each item based on it's loot table
-        const lootbox = [];
+        var lootbox = [];
         {
             let item = {};
             // item1 loot table
