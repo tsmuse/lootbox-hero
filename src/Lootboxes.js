@@ -10,8 +10,12 @@ class Lootboxes extends Component {
         // as an API to call, but for now this is what it is. 
         // Currently each tier is represented by the position in the array. Each item's statblock object is
         // in each tier
-        this.lootTable = LootTable; 
+        //this.lootTable = LootTable; 
         this.lootID = this.generateLootIDs();
+        this.state = {
+            "isLoaded" : false,
+            "lootTable" : {}
+        };
     }
     *generateLootIDs(){
         var seed = 0;
@@ -20,6 +24,18 @@ class Lootboxes extends Component {
             seed ++;
         }
         
+    }
+
+    componentDidMount(){
+        fetch("http://localhost:3000/stubs/lootTable.json")
+            .then(result => result.json())
+            .then(
+                (result)=>{
+                    this.setState({"lootTable": result, "isLoaded": true});
+                },
+                (error) => {
+                    this.setState({error});
+                });
     }
     generateBoxes() {
         // generate the items in the box
@@ -118,10 +134,10 @@ class Lootboxes extends Component {
         item["variation"] = this.rolldice(10);
         // These entries will eventually be values in a loot table look up based on type and
         // variation. For now just filling them with placeholders.
-        item["name"] = this.lootTable[item.type][item.tier][item.variation].name;
-        item["desc"] = this.lootTable[item.type][item.tier][item.variation].desc;
-        item["stats"] = this.lootTable[item.type][item.tier][item.variation].stats;
-        item["set"] = this.lootTable[item.type][item.tier][item.variation].set;
+        item["name"] = this.state.lootTable[item.type][item.tier][item.variation].name;
+        item["desc"] = this.state.lootTable[item.type][item.tier][item.variation].desc;
+        item["stats"] = this.state.lootTable[item.type][item.tier][item.variation].stats;
+        item["set"] = this.state.lootTable[item.type][item.tier][item.variation].set;
         if (item.type === "mount") {
             item["mountHead"] = "naked";
             item["mountBody"] = "naked";
@@ -211,35 +227,59 @@ class Lootboxes extends Component {
     }
 
     render(){
-        var boxToRender = this.props.lastBox;
-        return (
-            <section className="lootboxes">
-                <div className="lootboxes-button-group">
-                    <button className="open-boxes-btn" onClick={this.handleOpenBoxes} 
-                        disabled={this.props.playerUnopenedBoxes === 0} >
-                        Open Boxes
-                    </button>
-                    <button className="buy-boxes-btn" 
-                        onClick={this.props.buyLootboxHandler} 
-                        disabled={this.props.playerCash < 3}> 
+        
+        const boxToRender = this.props.lastBox,
+            { error, isLoaded, lootTable } = this.state;
+        if(error){
+            return <div> Error {error.message} </div>;
+        }
+        else if(!isLoaded){
+            return <div> Loading loot tables...</div>;
+        }
+        else{
+            return (
+                <section className="lootboxes">
+                    <div className="lootboxes-stats-group">
+                        <table className="lootboxes-stats-table">
+                            <tbody>
+                                <tr className="lootboxes-stats-row">
+                                    <td className="lootboxes-stats-label">Unopened boxes</td>
+                                    <td className="lootboxes-stats-value">{this.props.playerUnopenedBoxes}</td>
+                                </tr>
+                                <tr className="lootboxes-stats-row">
+                                    <td className="lootboxes-stats-label">Cash</td>
+                                    <td className="lootboxes-stats-value">{this.props.playerCash}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="lootboxes-button-group">
+                        <button className="open-boxes-btn" onClick={this.handleOpenBoxes}
+                            disabled={this.props.playerUnopenedBoxes === 0} >
+                            Open Boxes
+                        </button>
+                        <button className="buy-boxes-btn"
+                            onClick={this.props.buyLootboxHandler}
+                            disabled={this.props.playerCash < 3}>
                             Buy Box
-                    </button>
-                </div>
-                <ul className="loot-list">
-                    {boxToRender.map(function (item, index) {
-                        return (
-                            <li className="loot-item" key={`item_${index}`}>
-                                <h2 className="item-label">{`Item ${index + 1}`}</h2>
-                                <div className="item-card">
-                                    <h3 className="item-name">{item.name}</h3>
-                                    <p className="item-desc">{item.desc}</p>
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </section>
-        );
+                        </button>
+                    </div>
+                    <ul className="loot-list">
+                        {boxToRender.map(function (item, index) {
+                            return (
+                                <li className="loot-item" key={`item_${index}`}>
+                                    <h2 className="item-label">{`Item ${index + 1}`}</h2>
+                                    <div className="item-card">
+                                        <h3 className="item-name">{item.name}</h3>
+                                        <p className="item-desc">{item.desc}</p>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
+            );
+        }
     }
 }
 

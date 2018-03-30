@@ -36,6 +36,16 @@
         "mountFeet": "naked",
         "mountPet": "naked"
     },
+    "BASE_ABILITIES" : {
+        "str": 10,
+        "dex": 10,
+        "int": 10,
+        "wis": 10,
+        "sex": 10,
+        "brand": 10,
+        "luck": 10,
+        "credit": 650
+    },
     "loot": {},
     "lastBox": [],
     "boxesOpened": 0,

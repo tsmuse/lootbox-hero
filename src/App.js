@@ -6,6 +6,7 @@ import Lootboxes from "./Lootboxes";
 import CharacterStats from "./CharacterStats";
 import CharacterInventory from "./CharacterInventory";
 import CharacterEquipped from "./CharacterEquipped";
+import CrateStore from "./CrateStore";
 
 // placeholder "pages" to stub out the rest of the pages needed
 function Home(props){
@@ -20,18 +21,7 @@ function Home(props){
         </div>
     );
 }
-function CratecashStore(props) {
-    return (
-        <div>
-            <h1>Welcome to the Lootbox Hero CrateCash<sup>tm</sup> Store!</h1>
-            <p>
-                It's not finished...in fact it's not even started! But here are a few places you can
-                go right now!
-            </p>
-            <Link to="/player">Player Page</Link>
-        </div>
-    );
-}
+
 function WorkGames(props) {
     return (
         <div>
@@ -76,14 +66,14 @@ class App extends Component {
     // This load will need to go into a login screen of some kind, but for now putting it here
     componentDidMount() {
         
-        if(localStorage.getItem("player")){
+        if(localStorage.getItem("player") && localStorage.getItem("player") !== "{}"){
             // alert("premount: " + JSON.stringify(this.state.player));
             // alert("mount: " + localStorage.getItem("player"));
             this.setState({"player" : JSON.parse(localStorage.getItem("player")), isLoaded:true});
         }
         else {
             const loadPlayer = fetch("http://localhost:3000/stubs/playerStub.json");
-                // loadBaseStats = fetch("http://localhost:3000/stubs/baseAbilitiesStub.json");
+            // loadBaseStats = fetch("http://localhost:3000/stubs/baseAbilitiesStub.json");
 
             loadPlayer.then(result => result.json())
                 .then(
@@ -141,16 +131,31 @@ class App extends Component {
             return <div> Error {error.message}</div>;
         }
         else if(!isLoaded){
-                return <div>Loading...</div>
+            return <div>Loading...</div>;
         }
         else{
             return (
                 <Router>
                     <React.Fragment>
+                        <nav className="top-nav">
+                            <ul className="top-nav-list">
+                                <li className="top-nav-link">
+                                    <Link to="/player">Player</Link>
+                                </li>
+                                <li className="top-nav-link">
+                                    <Link to="/lootboxes">Loot boxes</Link>
+                                </li>
+                                <li className="top-nav-link">
+                                    <Link to="/crate-store">CrateCash<sup>tm</sup> Store</Link>
+                                </li>
+                            </ul>
+                        </nav>
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/crate-store" component={CratecashStore} />
                         <Route exact path="/work" component={WorkGames} />
                         <Route exact path="/grind" component={GrindGames} />
+                        <Route exact path="/crate-store" render={props => (
+                            <CrateStore />
+                        )} />
                         <Route exact path="/player" render={props => (
                             
                             <section className="character-sheet">
@@ -183,8 +188,7 @@ class App extends Component {
     }
     handleLootboxChange(lootbox) {
         this.setState(function (prevState, props) {
-            var newState = this.rebuildPlayer(prevState,
-                "name", "abilities", "equipped", "mount", "cash", "crateCash", "score");
+            var newState = this.rebuildPlayer(prevState);
             newState.player["lastBox"] = lootbox;
             newState.player["boxesOpened"] = prevState.player.boxesOpened + 1;
             newState.player["unopenedBoxes"] = prevState.player.unopenedBoxes - 1;
@@ -277,29 +281,29 @@ class App extends Component {
 
     calculateCrateCash(newState, newJunk) {
         switch (newJunk.tier) {
-            case 1:
-                newState.player.crateCash += 100;
-                break;
-            case 2:
-                newState.player.crateCash += 50;
-                break;
-            case 3:
-                newState.player.crateCash += 25;
-                break;
-            case 4:
-                newState.player.crateCash += 12;
-                break;
-            case 5:
-                newState.player.crateCash += 6;
-                break;
-            case 6:
-                newState.player.crateCash += 3;
-                break;
-            case 7:
-                newState.player.crateCash += 2;
-                break;
-            default:
-                break;
+        case 1:
+            newState.player.crateCash += 100;
+            break;
+        case 2:
+            newState.player.crateCash += 50;
+            break;
+        case 3:
+            newState.player.crateCash += 25;
+            break;
+        case 4:
+            newState.player.crateCash += 12;
+            break;
+        case 5:
+            newState.player.crateCash += 6;
+            break;
+        case 6:
+            newState.player.crateCash += 3;
+            break;
+        case 7:
+            newState.player.crateCash += 2;
+            break;
+        default:
+            break;
         }
 
         return newState;
@@ -307,18 +311,17 @@ class App extends Component {
 
     generateBaseAbilities() {
         var newBase = {};
-        var baseAbilities = this.BASE_ABILITIES;
+        var baseAbilities = this.state.player.BASE_ABILITIES;
         for (let score in baseAbilities) {
             newBase[score] = baseAbilities[score];
         }
         return newBase;
     }
-    rebuildPlayer(prevState, ...keys) {
+    rebuildPlayer(prevState) {
         // if no paramaters were given after prevState assume all 
-        if (keys.length === 0) {
-            keys = ["abilities", "boxesOpened", "cash", "crateCash", "equipped", "lastBox", "loot",
-                "mount", "name", "score", "unopenedBoxes"];
-        }
+        
+        var keys = ["abilities", "BASE_ABILITIES", "boxesOpened", "cash", "crateCash", "equipped", 
+            "lastBox", "loot", "mount", "name", "score", "unopenedBoxes"];
         var dupePlayer = { "player": {} };
 
         for (let key of keys) {
