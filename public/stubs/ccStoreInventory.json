@@ -1,0 +1,61 @@
+{
+    "tier1": {
+        "superAwesomeWinSword": {
+            "item": {
+                "tier": 1,
+                "variation": "crateCash",
+                "equipped": false,
+                "name": "CC Store Super Awesome Win Sword",
+                "desc": "This is a fancy Super Awesome Win Sword sold exclusively at the CrateCash Store. It does +100 to Strength, + 50 to Luck, and +75 to Credit Score. Pay...TO WIN!",
+                "stats": {
+                    "str": 100,
+                    "dex": 0,
+                    "int": 0,
+                    "wis": 0,
+                    "sex": 0,
+                    "brand": 0,
+                    "luck": 50,
+                    "credit": 75
+                },
+                "type": "weaponMain",
+                "set": ""
+            },
+            "price": 400,
+            "img": "https://placebear.com/400/300",
+            "name": "Tier 1 Super Aweomser Test Item!!",
+            "desc": "This item is substantially better than almost anything you can find in a crate 99% of the time. Literally. The odds are terrible."
+        },
+        "superAwesomeWinSheild": {
+            "item": {
+                "tier": 1,
+                "variation": "crateCash",
+                "equipped": false,
+                "name": "CC Store Super Awesome Win Shield",
+                "desc": "This is a fancy Super Awesome Win Sheild sold exclusively at the CrateCash Store. It does +100 to Strength, + 50 to Luck, and +75 to Credit Score. Pay...TO WIN!",
+                "stats": {
+                    "str": 100,
+                    "dex": 0,
+                    "int": 0,
+                    "wis": 0,
+                    "sex": 0,
+                    "brand": 0,
+                    "luck": 50,
+                    "credit": 75
+                },
+                "type": "weaponOff",
+                "set": ""
+            },
+            "price": 400,
+            "img": "https://placebear.com/401/300",
+            "name": "Tier 1 Super Aweomser Test Item TWO!!",
+            "desc": "This item is substantially better than almost anything you can find in a crate 99% of the time. Literally. The odds are terrible."
+        }
+
+    },
+    "tier2" : {},
+    "tier3" : {},
+    "tier4" : {},
+    "tier5" : {},
+    "tier6" : {},
+    "tier7" : {}
+}

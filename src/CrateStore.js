@@ -2,13 +2,13 @@ import React, { Component } from "react";
 
 function CrateStoreItem(props){
     return (
-        <li className="crate-store-item" key={props.key}>
+        <li className="crate-store-item">
             <img className="crate-store-item-img" src={props.itemImg} />
             <h3 className="crate-store-item-name">{props.itemName}</h3>
             <p className="crate-store-item-price">{props.itemPrice}CC</p>
             <p className="crate-store-item-desc">{props.itemDesc}</p>
             <button className="crate-store-buy-btn" onClick={props.itemBuyHandler} 
-            data-store-id={props.itemID} >
+            data-store-id={props.itemID} disabled={props.buyDisabled} >
                 Buy now, win!
             </button>
         </li>
@@ -18,37 +18,37 @@ class CrateStore extends Component {
     constructor(props){
         super(props);
         this.state = {
-            "storeInventory": {
-                "tier1": {
-                    "superAwesomeWinSword": {
-                        "item": {
-                            "name": "Tier 1 Head Variation 1",
-                            "desc": "This is a fancy new Variation 1 Tier 1 Head. It does +100 to Strength and +50 to Credit Score",
-                            "stats": {
-                                "str": 100,
-                                "dex": 0,
-                                "int": 0,
-                                "wis": 0,
-                                "sex": 0,
-                                "brand": 0,
-                                "luck": 0,
-                                "credit": 50
-                            },
-                            "set": ""
-                        },
-                        "price": 400,
-                        "img": "https://placebear.com/400/300",
-                        "name": "Tier 1 Super Aweomser Test Item!!",
-                        "desc": "This item is substantially better than almost anything you can find in a crate 99% of the time. Literally. The odds are terrible."
-                    }
-                }
-            }
+            "storeInventory": {},
+            "isLoaded" : false
         };
         this.handleBuyButton = this.handleBuyButton.bind(this);
     }
 
-    handleBuyButton(e){
+    componentDidMount(){
+        fetch("http://localhost:3000/stubs/ccStoreInventory.json")
+            .then(result => result.json())
+            .then(
+                (result) => {
+                    this.setState({ "storeInventory": result, "isLoaded": true });
+                },
+                (error) => {
+                    this.setState({ error });
+                });
+    }
 
+    handleBuyButton(e){
+        var itemID = e.currentTarget.dataset.storeId.split("_");
+        if(itemID.length === 2){
+            var itemTier = itemID[0];
+            var itemName = itemID[1];
+            var boughtItem = this.state.storeInventory[itemTier][itemName];
+            boughtItem.item["id"] = itemName;
+            this.props.buyItemHandler(boughtItem, itemName);
+        }
+        else{
+            console.error(`ItemID was incorrect length. Expected 2, got ${itemID.length}`);
+        }
+        
     }
 
     generateListings(inventory, tier){
@@ -60,29 +60,38 @@ class CrateStore extends Component {
                 itemPrice={inventory[tier][item].price}
                 itemDesc={inventory[tier][item].desc}
                 itemBuyHandler={this.handleBuyButton}
-                itemID={`${tier}_${item}`} />;
+                itemID={`${tier}_${item}`}
+                buyDisabled={this.props.playerCrateCash < inventory[tier][item].price} />;
             listingsToRender.push(listing);
         }
 
         return listingsToRender;
     }
     render(){
-        // NOTE: The listing needs to have the item object in it so it can be easily dropped into
-        // inventory. 
-        const tier1ToRender = this.generateListings(this.state.storeInventory, "tier1");
-        return (
-            <section className="crate-store">
-                <h1>CrateCash<sup>tm</sup> Store -- Pay...TO WIN!</h1>
-                <section className="crate-store-section">
-                    <h2 className="crate-store-section-title">Tier 1 Goods</h2>
-                    <ul className="crate-store-section-list">
-                        {tier1ToRender.map(function(listing){
-                            return listing;
-                        })}
-                    </ul>
+        const {isLoaded , storeInventory, error } = this.state;
+        if(error){
+            return <div>Error {error.message} </div>;
+        } 
+        else if(!isLoaded){
+            return <div>Loading...</div>;
+        }
+        else {
+            const tier1ToRender = this.generateListings(storeInventory, "tier1");
+            return (
+                <section className="crate-store">
+                    <h1>CrateCash<sup>tm</sup> Store -- Pay...TO WIN!</h1>
+                    <h2>Your CrateCash<sup>tm</sup>: {this.props.playerCrateCash}</h2>
+                    <section className="crate-store-section">
+                        <h2 className="crate-store-section-title">Tier 1 Goods</h2>
+                        <ul className="crate-store-section-list">
+                            {tier1ToRender.map(function (listing) {
+                                return listing;
+                            })}
+                        </ul>
+                    </section>
                 </section>
-            </section>
-        );
+            );
+        }
     }
 }
 

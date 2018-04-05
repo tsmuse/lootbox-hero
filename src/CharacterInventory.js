@@ -6,6 +6,12 @@ function InventoryItem(props){
             <p className="inventory-item-name">
                 {props.lootName}
             </p>
+            <p className="inventory-item-stats">
+                Str: +{props.lootStats.str}, Dex: +{props.lootStats.dex},
+                    Int: +{props.lootStats.int}, Wis: +{props.lootStats.wis},
+                    Sex: +{props.lootStats.sex}, Brand: +{props.lootStats.brand},
+                    Luck: +{props.lootStats.luck}, Credit: +{props.lootStats.credit}
+            </p>
             <button className="inventory-equip-btn" onClick={props.handleEquipButton} 
                 data-item-index={props.lootID} disabled={props.equipDisabled}>
                 Equip
@@ -59,6 +65,7 @@ class CharacterInventory extends Component {
                             return (<InventoryItem key={`0${loot.id}_${loot.type}`}
                                 lootName={loot.name}
                                 lootID={loot.id}
+                                lootStats={loot.stats}
                                 handleEquipButton={this.handleEquipButton}
                                 handleJunkButton={this.handleJunkButton}
                                 equipDisabled={this.shouldDisable(loot, this.props.mountEquipped)}

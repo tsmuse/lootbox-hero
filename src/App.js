@@ -62,6 +62,7 @@ class App extends Component {
         this.handleEquipItem = this.handleEquipItem.bind(this);
         this.handleJunkItem = this.handleJunkItem.bind(this);
         this.handleUnequipItem = this.handleUnequipItem.bind(this);
+        this.handleBuyItem = this.handleBuyItem.bind(this);
     }
     // This load will need to go into a login screen of some kind, but for now putting it here
     componentDidMount() {
@@ -92,23 +93,8 @@ class App extends Component {
                         });
                     }
                 )
-                // .then(() => loadBaseStats)
-                // .then(result => result.json())
-                // .then(
-                //     (result) => {
-                //         this.setState({
-                //             "BASE_ABILITIES": result
-                //         });
-                //     },
-                //     // Note: it's important to handle errors here
-                //     // instead of a catch() block so that we don't swallow
-                //     // exceptions from actual bugs in components.
-                //     (error) => {
-                //         this.setState({
-                //             error
-                //         });
-                //     }
-                // )
+               // seperated this out for now in case I need to load more json, although I may be 
+               // about to use Promise.all since I'm blocking on the load...
                 .then(() => {
                     this.setState({ "isLoaded": true });
                 });
@@ -154,7 +140,8 @@ class App extends Component {
                         <Route exact path="/work" component={WorkGames} />
                         <Route exact path="/grind" component={GrindGames} />
                         <Route exact path="/crate-store" render={props => (
-                            <CrateStore />
+                            <CrateStore playerCrateCash={this.state.player.crateCash}
+                                buyItemHandler={this.handleBuyItem} />
                         )} />
                         <Route exact path="/player" render={props => (
                             
@@ -250,6 +237,15 @@ class App extends Component {
             newState = this.removeEquipped(newState, unequippedItem);
             newState = this.updateAbilities(newState);
             newState = this.updateScore(newState);
+            return newState;
+        });
+    }
+
+    handleBuyItem(boughtItem){
+        this.setState(function (prevState, props) {
+            var newState = this.rebuildPlayer(prevState);
+            newState.player.loot[boughtItem.id] = boughtItem.item;
+            newState.player.crateCash -= boughtItem.price;
             return newState;
         });
     }

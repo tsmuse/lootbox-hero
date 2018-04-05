@@ -6,11 +6,6 @@ class Lootboxes extends Component {
     constructor(props){
         super(props);
         this.handleOpenBoxes = this.handleOpenBoxes.bind(this);
-        // this is a super basic version of the loot tables. Most Likely will end up in the backend
-        // as an API to call, but for now this is what it is. 
-        // Currently each tier is represented by the position in the array. Each item's statblock object is
-        // in each tier
-        //this.lootTable = LootTable; 
         this.lootID = this.generateLootIDs();
         this.state = {
             "isLoaded" : false,
