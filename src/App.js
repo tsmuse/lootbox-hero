@@ -66,7 +66,6 @@ class App extends Component {
     }
     // This load will need to go into a login screen of some kind, but for now putting it here
     componentDidMount() {
-        
         if(localStorage.getItem("player") && localStorage.getItem("player") !== "{}"){
             // alert("premount: " + JSON.stringify(this.state.player));
             // alert("mount: " + localStorage.getItem("player"));
@@ -102,15 +101,33 @@ class App extends Component {
     }
     componentDidUpdate(){
         // alert("updating" + JSON.stringify(this.state.player));
-        const currentState = JSON.stringify(this.state.player);
-        if(localStorage.getItem("player") !== currentState)
-            localStorage.setItem("player", currentState);
+        const currentPlayerState = JSON.stringify(this.state.player);
+
+        if(localStorage.getItem("player") !== currentPlayerState){
+            localStorage.setItem("player", currentPlayerState);
+        }
+
+        const gameResult = localStorage.getItem("testGame");
+        if (gameResult) {
+            this.updateCashPostGameCycle(gameResult);
+        }
+
     }
     componentWillUnmount(){
         // alert("unmount: " + JSON.stringify(this.state.player));
         localStorage.setItem("player", JSON.stringify(this.state.player));
     }
 
+    updateCashPostGameCycle(gameResult){
+        var result = JSON.parse(gameResult);
+        localStorage.removeItem("testGame");
+        this.setState(function (prevState, props){
+            var newState = this.rebuildPlayer(prevState);
+            newState.player.cash += result.cash;
+
+            return newState;
+        });
+    }
     render(){
         const { error, isLoaded, player } = this.state;
         if(error){
