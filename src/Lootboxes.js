@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import LootTable from "./config/LootTable";
 
 
 class Lootboxes extends Component {
@@ -224,7 +223,7 @@ class Lootboxes extends Component {
     render(){
         
         const boxToRender = this.props.lastBox,
-            { error, isLoaded, lootTable } = this.state;
+            { error, isLoaded } = this.state;
         if(error){
             return <div> Error {error.message} </div>;
         }

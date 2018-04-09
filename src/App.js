@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import "normalize.css";
 import "./App.css";
 import Lootboxes from "./Lootboxes";
@@ -7,6 +7,7 @@ import CharacterStats from "./CharacterStats";
 import CharacterInventory from "./CharacterInventory";
 import CharacterEquipped from "./CharacterEquipped";
 import CrateStore from "./CrateStore";
+import WorkGames from "./WorkGames";
 
 // placeholder "pages" to stub out the rest of the pages needed
 function Home(props){
@@ -20,20 +21,8 @@ function Home(props){
             <Link to="/player">Player Page</Link>
         </div>
     );
-}
-
-function WorkGames(props) {
-    return (
-        <div>
-            <h1>Welcome to the Lootbox Hero Work Games!</h1>
-            <p>
-                It's not finished...in fact it's not even started! But here are a few places you can
-                go right now!
-            </p>
-            <Link to="/player">Player Page</Link>
-        </div>
-    );
-}
+}   
+    
 function GrindGames(props) {
     return (
         <div>
@@ -150,6 +139,9 @@ class App extends Component {
                                 </li>
                                 <li className="top-nav-link">
                                     <Link to="/crate-store">CrateCash<sup>tm</sup> Store</Link>
+                                </li>
+                                <li className="top-nav-link">
+                                   <Link to="/work">Work to earn cash</Link>
                                 </li>
                             </ul>
                         </nav>
