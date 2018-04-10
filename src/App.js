@@ -65,6 +65,7 @@ class App extends Component {
         this.handleJunkItem = this.handleJunkItem.bind(this);
         this.handleUnequipItem = this.handleUnequipItem.bind(this);
         this.handleBuyItem = this.handleBuyItem.bind(this);
+        this.handleWorkComplete = this.handleWorkComplete.bind(this);
     }
     // This load will need to go into a login screen of some kind, but for now putting it here
     componentDidMount() {
@@ -109,27 +110,33 @@ class App extends Component {
             localStorage.setItem("player", currentPlayerState);
         }
 
-        const gameResult = localStorage.getItem("testGame");
-        if (gameResult) {
-            this.updateCashPostGameCycle(gameResult);
-        }
+        // const gameResult = localStorage.getItem("testGame");
+        // if (gameResult) {
+        //     this.updateCashPostGameCycle(gameResult);
+        // }
 
     }
     componentWillUnmount(){
         // alert("unmount: " + JSON.stringify(this.state.player));
         localStorage.setItem("player", JSON.stringify(this.state.player));
     }
-
-    updateCashPostGameCycle(gameResult){
-        var result = JSON.parse(gameResult);
-        localStorage.removeItem("testGame");
+    handleWorkComplete(cashEarned){
         this.setState(function (prevState, props){
-            var newState = this.rebuildPlayer(prevState);
-            newState.player.cash += result.cash;
-
+            let newState = this.rebuildPlayer(prevState);
+            newState.player.cash += cashEarned;
             return newState;
         });
     }
+    // updateCashPostGameCycle(gameResult){
+    //     var result = JSON.parse(gameResult);
+    //     localStorage.removeItem("testGame");
+    //     this.setState(function (prevState, props){
+    //         var newState = this.rebuildPlayer(prevState);
+    //         newState.player.cash += result.cash;
+
+    //         return newState;
+    //     });
+    // }
     render(){
         const { error, isLoaded, player } = this.state;
         if(error){
@@ -161,7 +168,8 @@ class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/grind" component={GrindGames} />
                         <Route exact path="/work"  render={props => (
-                            <WorkGames shiftList={this.generateWorkList()} />
+                            <WorkGames shiftList={this.generateWorkList()}
+                                workCompleteHandler = {this.handleWorkComplete} />
                         )} />
                         <Route exact path="/crate-store" render={props => (
                             <CrateStore playerCrateCash={this.state.player.crateCash}
@@ -203,11 +211,14 @@ class App extends Component {
         for( let i = 0; i < this.shiftLength; i++){
             let game = this.workGamesLibrary[rolldice(10)-1],
                 keys = Object.keys(gameList);
+            // check for duplicate rolls and keep rolling until we don't have a dupe
             while(keys.length > 0 && keys.indexOf(game.name) !== -1){
                 game = this.workGamesLibrary[rolldice(10) - 1];
             }
             gameList[game.name] = game;
         }
+        // for testing/debugging a specific game
+        // gameList = {"workGame10": this.workGamesLibrary[9]};
 
         return gameList;
         
