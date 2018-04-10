@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { rolldice } from "./Helpers";
 import "normalize.css";
 import "./App.css";
 import Lootboxes from "./Lootboxes";
@@ -45,7 +46,19 @@ class App extends Component {
             "isLoaded" : false,
             "player" : {}
         };
-
+        this.workGamesLibrary = [
+            { name: "workGame01", value: 10 },
+            { name: "workGame02", value: 10 },
+            { name: "workGame03", value: 10 },
+            { name: "workGame04", value: 10 },
+            { name: "workGame05", value: 10 },
+            { name: "workGame06", value: 10 },
+            { name: "workGame07", value: 20 },
+            { name: "workGame08", value: 30 },
+            { name: "workGame09", value: 50 },
+            { name: "workGame10", value: 100 }
+        ];
+        this.shiftLength = 4; // need to figure out where this should live
         this.handleLootboxChange = this.handleLootboxChange.bind(this);
         this.handleBuyLootbox = this.handleBuyLootbox.bind(this);
         this.handleEquipItem = this.handleEquipItem.bind(this);
@@ -141,13 +154,15 @@ class App extends Component {
                                     <Link to="/crate-store">CrateCash<sup>tm</sup> Store</Link>
                                 </li>
                                 <li className="top-nav-link">
-                                   <Link to="/work">Work to earn cash</Link>
+                                    <Link to="/work">Work to earn cash</Link>
                                 </li>
                             </ul>
                         </nav>
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/work" component={WorkGames} />
                         <Route exact path="/grind" component={GrindGames} />
+                        <Route exact path="/work"  render={props => (
+                            <WorkGames shiftList={this.generateWorkList()} />
+                        )} />
                         <Route exact path="/crate-store" render={props => (
                             <CrateStore playerCrateCash={this.state.player.crateCash}
                                 buyItemHandler={this.handleBuyItem} />
@@ -181,6 +196,21 @@ class App extends Component {
                 </Router>
             );
         }
+    }
+
+    generateWorkList(){
+        let gameList = {};
+        for( let i = 0; i < this.shiftLength; i++){
+            let game = this.workGamesLibrary[rolldice(10)-1],
+                keys = Object.keys(gameList);
+            while(keys.length > 0 && keys.indexOf(game.name) !== -1){
+                game = this.workGamesLibrary[rolldice(10) - 1];
+            }
+            gameList[game.name] = game;
+        }
+
+        return gameList;
+        
     }
     handleLootboxChange(lootbox) {
         this.setState(function (prevState, props) {

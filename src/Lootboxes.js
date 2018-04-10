@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { rolldice } from "./Helpers";
 
 
 class Lootboxes extends Component {
@@ -33,11 +34,11 @@ class Lootboxes extends Component {
     }
     generateBoxes() {
         // generate the items in the box
-        const item1 = this.rolldice(10000),
-            item2 = this.rolldice(10000),
-            item3 = this.rolldice(10000),
-            item4 = this.rolldice(10000),
-            bonus = this.rolldice(100) < 17 ? this.rolldice(10000) : undefined;
+        const item1 = rolldice(10000),
+            item2 = rolldice(10000),
+            item3 = rolldice(10000),
+            item4 = rolldice(10000),
+            bonus = rolldice(100) < 17 ? rolldice(10000) : undefined;
 
 
         // evaluate each item based on it's loot table
@@ -125,7 +126,7 @@ class Lootboxes extends Component {
         item["id"] = this.lootID.next().value;
         item["equipped"] = false;
         item["type"] = this.getItemType();
-        item["variation"] = this.rolldice(10);
+        item["variation"] = rolldice(10);
         // These entries will eventually be values in a loot table look up based on type and
         // variation. For now just filling them with placeholders.
         item["name"] = this.state.lootTable[item.type][item.tier][item.variation].name;
@@ -155,7 +156,7 @@ class Lootboxes extends Component {
         // Roll a d200 to figure out which type, this will probably need to change once there are
         // actual items in each one? Maybe I can just switch on lootType % 10 to get the specifics?
         // TBD.
-        const lootType = this.rolldice(20);
+        const lootType = rolldice(20);
         
         switch(lootType){
         case 1: 
@@ -205,15 +206,7 @@ class Lootboxes extends Component {
         }        
     }
 
-    rolldice(dice) {
-        if (!Number.isNaN(dice)) {
-            var min = Math.ceil(1);
-            var max = Math.floor(dice);
-
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-        return undefined;
-    }
+    
 
     handleOpenBoxes() {
         const lootbox = this.generateBoxes();

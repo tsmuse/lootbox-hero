@@ -2,6 +2,17 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import * as PIXI from "pixi.js";
 
+const Application = PIXI.Application,
+    Container = PIXI.Container,
+    loader = PIXI.loader,
+    resources = PIXI.loader.resources,
+    Graphics = PIXI.Graphics,
+    TextureCache = PIXI.utils.TextureCache,
+    Sprite = PIXI.Sprite,
+    Text = PIXI.Text,
+    TextStyle = PIXI.TextStyle;
+
+
 class WorkGames extends Component {
     constructor(props) {
         super(props);
@@ -14,21 +25,27 @@ class WorkGames extends Component {
             antialiasing: false,
             resolution: 1
         });
-        this.gameScene = new PIXI.Container();
-        this.loader = PIXI.loader;
+        this.shiftList = this.props.shiftList;
+        this.scenesToPlay = [];
+        this.sceneTimer = 5;
         this.setupGame = this.setupGame.bind(this);
-        this.play = this.play.bind(this);
-        this.end = this.end.bind(this);
+        // define the scenes for each microgame
+        this.placeholderScenes = [];
+        this.treasureHunterScene = new Container();
+
+        // bind the functions that control the game loop for each scene 
+        // this.play = this.play.bind(this);
+        // this.end = this.end.bind(this);
 
     }
     componentDidMount() {
         this.container.append(this.game.view);
-        this.loader.add("gameAssets/sprites/treasureHunter.json")
+        loader.add("gameAssets/sprites/treasureHunter.json")
             .load(this.setupGame);
     }
     componentWillUnmount(){
         this.game.destroy(true);
-        this.loader.reset();
+        loader.reset();
         console.log("destroyed game");
     }
     render() {
@@ -44,36 +61,38 @@ class WorkGames extends Component {
 
     }
 
-    setupGame() {
-        this.game.stage.addChild(this.gameScene);
-        let id = PIXI.loader.resources["gameAssets/sprites/treasureHunter.json"].textures;
-        
+    // Setup the dungegon game demo I built in the pixi.js tutorial
+    setupTreasureHunter(){
+        this.game.stage.addChild(this.treasureHunterScene);
+        this.treasureHunterScene.visible = false;
+        let id = resources["gameAssets/sprites/treasureHunter.json"].textures;
+
         // Dungeon
-        this.dungeon = new PIXI.Sprite(id["dungeon.png"]);
-        this.gameScene.addChild(this.dungeon);
+        this.dungeon = new Sprite(id["dungeon.png"]);
+        this.treasureHunterScene.addChild(this.dungeon);
 
         //Door
-        this.door = new PIXI.Sprite(id["door.png"]);
-        this.door.position.set(32,0);
-        this.gameScene.addChild(this.door);
-        
+        this.door = new Sprite(id["door.png"]);
+        this.door.position.set(32, 0);
+        this.treasureHunterScene.addChild(this.door);
+
         //Explorer
-        this.explorer = new PIXI.Sprite(id["explorer.png"]);
+        this.explorer = new Sprite(id["explorer.png"]);
         this.explorer.position.set(
-            68, 
-            this.gameScene.height / 2 - this.explorer.height / 2
+            68,
+            this.treasureHunterScene.height / 2 - this.explorer.height / 2
         );
         this.explorer.vx = 0;
         this.explorer.vy = 0;
-        this.gameScene.addChild(this.explorer);
+        this.treasureHunterScene.addChild(this.explorer);
 
         //Treasure
-        this.treasure = new PIXI.Sprite(id["treasure.png"]);
+        this.treasure = new Sprite(id["treasure.png"]);
         this.treasure.position.set(
-            this.gameScene.width - this.treasure.width - 48,
-            this.gameScene.height / 2 - this.treasure.height / 2
+            this.treasureHunterScene.width - this.treasure.width - 48,
+            this.treasureHunterScene.height / 2 - this.treasure.height / 2
         );
-        this.gameScene.addChild(this.treasure);
+        this.treasureHunterScene.addChild(this.treasure);
 
         // Make blobs
         let numBlobs = 6,
@@ -81,103 +100,169 @@ class WorkGames extends Component {
             xOffset = 150,
             speed = 2,
             direction = 1;
-        
+
         // array to store blobs
         this.blobs = [];
-        for (let i = 0; i < numBlobs; i++){
-            let blob = new PIXI.Sprite(id["blob.png"]);
+        for (let i = 0; i < numBlobs; i++) {
+            let blob = new Sprite(id["blob.png"]);
             let x = spacing * i + xOffset;
             let y = this.randomInt(0, this.game.stage.height - blob.height);
             blob.position.set(x, y);
             blob.vy = speed * direction;
             direction *= -1;
             this.blobs.push(blob);
-            this.gameScene.addChild(blob);
+            this.treasureHunterScene.addChild(blob);
         }
 
         // Create health bar
-        this.healthBar = new PIXI.Container();
+        this.healthBar = new Container();
         this.healthBar.position.set(this.game.stage.width - 170, 4);
-        this.gameScene.addChild(this.healthBar);
+        this.treasureHunterScene.addChild(this.healthBar);
 
         //Create black background rectangle
-        let innerBar = new PIXI.Graphics();
+        let innerBar = new Graphics();
         innerBar.beginFill(0x000000);
         innerBar.drawRect(0, 0, 128, 8);
         innerBar.endFill();
         this.healthBar.addChild(innerBar);
 
         //Create red front rectangle
-        let outerBar = new PIXI.Graphics();
+        let outerBar = new Graphics();
         outerBar.beginFill(0xFF3300);
-        outerBar.drawRect(0 ,0, 128, 8);
+        outerBar.drawRect(0, 0, 128, 8);
         outerBar.endFill();
         this.healthBar.addChild(outerBar);
         this.healthBar.outer = outerBar;
 
-        // gameover scene?
-
-        // creating a closure over the explorer sprite so I can interact with it in the ley handlers
+        // creating a closure over the explorer sprite so I can interact with it in the key handlers
         let explorer = this.explorer;
         // Capture keyboard arrow keys
         let left = this.keyboard(37),
             up = this.keyboard(38),
             right = this.keyboard(39),
             down = this.keyboard(40);
-        
+
         //left arrow key press method
-        left.press = function(){
+        left.press = function () {
             explorer.vx = -5;
             explorer.vy = 0;
         };
-        left.release = function(){
+        left.release = function () {
             //If the left arrow has been released, and the right arrow isn't down,
             // and the explorer isn't moving vertically: stop the explorer
-            if(!right.isDown && explorer.vy === 0){
+            if (!right.isDown && explorer.vy === 0) {
                 explorer.vx = 0;
             }
         };
 
         // up
-        up.press = function(){
+        up.press = function () {
             explorer.vy = -5;
             explorer.yx = 0;
         };
-        up.release = function(){
-            if(!down.isDown && explorer.vx === 0){
+        up.release = function () {
+            if (!down.isDown && explorer.vx === 0) {
                 explorer.vy = 0;
             }
         };
         // right
-        right.press = function(){
+        right.press = function () {
             explorer.vx = 5;
             explorer.vy = 0;
         };
-        right.release = function(){
-            if(!left.isDown && explorer.vy === 0){
+        right.release = function () {
+            if (!left.isDown && explorer.vy === 0) {
                 explorer.vx = 0;
             }
         };
         //down
-        down.press = function(){
+        down.press = function () {
             explorer.vy = 5;
             explorer.vx = 0;
         };
-        down.release = function(){
-            if(!up.isDown && explorer.vx === 0) {
+        down.release = function () {
+            if (!up.isDown && explorer.vx === 0) {
                 explorer.vy = 0;
             }
         };
-
-        this.gameState = this.play;
+    }
+    // stub to handle the other games I don't have yet
+    setupPlaceholder(name){
+        let scene = new Container();
+        scene.visible = false;
+        let style = new TextStyle({
+            fontFamily: "Futura",
+            fontSize: 64,
+            fill: "white"
+        });
+        let message = new Text(`Fun! Game ${name}`, style);
+        message.position.set(120, this.game.stage.height / 2 - 32);
+        scene.addChild(message);
+        this.placeholderScenes.push(scene);
+        this.game.stage.addChild(scene);
+    }
+    setupGame() {
+        // itterate through the game list and set up the games needed for this loop
+        for(let name in this.shiftList){
+            let game = this.shiftList[name];
+            switch(game.name){
+                case "workGame01":
+                case "workGame02":
+                case "workGame03":
+                case "workGame04":
+                case "workGame05":
+                case "workGame06":
+                case "workGame07":
+                case "workGame08":
+                case "workGame09":
+                    this.setupPlaceholder(game.name);
+                    this.scenesToPlay.push(this.placeHolderGame);
+                    break;
+                case "workGame10" : 
+                    this.setupTreasureHunter();
+                    this.scenesToPlay.push(this.treasureHunter);
+                    break;
+                default:
+                    console.error("Asked for a game that isn't in my list");
+            }   
+        }
+        
+        this.switchGame();
+        this.frameCounter = 0;
         this.game.ticker.add(delta => this.gameLoop(delta));
     }
 
     gameLoop(delta){
         this.gameState(delta);
     }
-
-    play(delta){
+    switchGame(){
+        let nextScene = this.scenesToPlay.slice();
+        if(nextScene === this.treasureHunter){
+            this.treasureHunterScene.visible = true;
+            this.gameState = this.treasureHunter;
+        }
+        else{
+            // this is convoluted because I don't have unique games for everything else
+            let placeholder = this.placeholderScenes.slice();
+            placeholder.visible = true;
+            this.gameState = this.placeHolderGame;
+        }
+        this.currentScene = nextScene;
+    }
+    placeHolderGame(){
+        this.frameCounter += 1;
+        if(this.frameCounter > (this.game.ticker.FPS * this.sceneTimer)){
+            if(this.scenesToPlay.length > 0){
+                this.currentScene.visible = false;
+                this.switchGame();
+            }
+            else{
+                this.gameState = this.end;
+            }
+        }
+        
+    }
+    treasureHunter(delta){
         // use the explorer's velocity to make it move
         this.explorer.x += this.explorer.vx;
         this.explorer.y += this.explorer.vy;
@@ -227,14 +312,27 @@ class WorkGames extends Component {
         //Does the explorer have enough health? If the width of the innerBar is less than zero
         //end the game
         if(this.healthBar.outer.width < 0) {
-            this.gameState = this.end;
+            if (this.scenesToPlay.length > 0) {
+                this.currentScene.visible = false;
+                this.switchGame();
+            }
+            else {
+                this.gameState = this.end;
+            }
         }
 
         //If the explorer has brought the treasuer to the exit end the game
         if(this.hitTestRectangle(this.treasure, this.door)){
-            this.gameState = this.end;
+            if (this.scenesToPlay.length > 0) {
+                this.currentScene.visible = false;
+                this.switchGame();
+            }
+            else {
+                this.gameState = this.end;
+            }
         }
     }
+
     end(){
         let gameresult = JSON.stringify({"victory": true, "cash": 10});
         localStorage.setItem("testGame", gameresult);
