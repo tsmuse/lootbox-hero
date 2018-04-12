@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import * as PIXI from "pixi.js";
-import { setupTreasureHunter, treasureHunter } from "./TreasureHunter";
-import { setupPlaceholder, placeholderGame } from "./PlaceholderGame";
+import { setupTreasureHunter, treasureHunter } from "../../microgames/TreasureHunter";
+import { setupPlaceholder, placeholderGame } from "../../microgames/PlaceholderGame";
 
 const Application = PIXI.Application,
     Container = PIXI.Container,

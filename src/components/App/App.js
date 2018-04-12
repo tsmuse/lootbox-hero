@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
-import { rolldice } from "./Helpers";
-import "normalize.css";
-import "./App.css";
-import Lootboxes from "./Lootboxes";
-import CharacterStats from "./CharacterStats";
-import CharacterInventory from "./CharacterInventory";
-import CharacterEquipped from "./CharacterEquipped";
-import CrateStore from "./CrateStore";
-import WorkGames from "./WorkGames";
+import { rolldice } from "../../Helpers";
+import Lootboxes from "../Lootboxes/Lootboxes";
+import CharacterStats from "../CharacterStats/CharacterStats";
+import CharacterInventory from "../CharacterInventory/CharacterInventory";
+import CharacterEquipped from "../CharacterEquipped/CharacterEquipped";
+import CrateStore from "../CrateStore/CrateStore";
+import WorkGames from "../WorkGames/WorkGames";
 
 // placeholder "pages" to stub out the rest of the pages needed
 function Home(props){
@@ -95,9 +93,9 @@ class App extends Component {
                         });
                     }
                 )
-               // seperated this out for now in case I need to load more json, although I may be 
-               // about to use Promise.all since I'm blocking on the load...
-                .then(() => {
+                // seperated this out for now in case I need to load more json, although I may be 
+                // about to use Promise.all since I'm blocking on the load...
+                .then(() => {               
                     this.setState({ "isLoaded": true });
                 });
         }   
@@ -218,7 +216,7 @@ class App extends Component {
             gameList[game.name] = game;
         }
         // for testing/debugging a specific game
-        // gameList = {"workGame10": this.workGamesLibrary[9]};
+        gameList = {"workGame10": this.workGamesLibrary[9]};
 
         return gameList;
         

@@ -1,59 +1,6 @@
 import React, { Component } from "react";
-
-function MountSlot(props){
-    if(props.mount.equipped){
-        return(
-            <div className="equipment-slot mount">
-                <h2 className="slot-title">{props.title}</h2>
-                <EquipmentSlot title="Head" item={props.mount.mountHead}
-                    handleUnequipButton={props.handleUnequipButton} />
-                <EquipmentSlot title="Body" item={props.mount.mountBody}
-                    handleUnequipButton={props.handleUnequipButton} />
-                <EquipmentSlot title="Feet" item={props.mount.mountFeet}
-                    handleUnequipButton={props.handleUnequipButton} />
-                <EquipmentSlot title="Pet" item={props.mount.mountPet}
-                    handleUnequipButton={props.handleUnequipButton} />
-            </div>
-        );
-    }
-    else {
-        return (
-            <div className="equipment-slot mount">
-                <h2 className="slot-title">{props.title}</h2>
-                <p className="equipped-item">No mount equipped</p>
-            </div>
-        );
-    }
-}
-
-function EquipmentSlot(props){
-    if(props.item !== "naked"){
-        return (
-            <div className="equipment-slot">
-                <h2 className="slot-title">{props.title}</h2>
-                <p className="equipped-item">{props.item.name}</p>
-                <p className="equipped-item-stats">
-                    Str: +{props.item.stats.str}, Dex: +{props.item.stats.dex}, 
-                    Int: +{props.item.stats.int}, Wis: +{props.item.stats.wis}, 
-                    Sex: +{props.item.stats.sex}, Brand: +{props.item.stats.brand},
-                    Luck: +{props.item.stats.luck}, Credit: +{props.item.stats.credit}
-                </p>
-                <button className="equipped-uneqp-btn" onClick={props.handleUnequipButton} 
-                    data-item-index={props.item.id} >
-                    Unequip
-                </button>
-            </div>
-        );
-    }
-    else {
-        return (
-            <div className="equipment-slot">
-                <h2 className="slot-title">{props.title}</h2>
-                <p className="equipped-item">{props.item}</p>
-            </div>
-        );
-    }
-}
+import MountSlot from "../MountSlot/MountSlot";
+import EquipmentSlot from "../EquipmentSlot/EquipmentSlot";
 
 class CharacterEquipped extends Component{
     constructor(props){

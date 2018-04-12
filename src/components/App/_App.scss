@@ -1,14 +1,5 @@
 $item-card-border: 1px solid #000;
 
-
-* { 
-    box-sizing: border-box;
-}
-
-body {
-    font-size: 16px;
-}
-
 .hidden {
     display: none;
 }
@@ -31,7 +22,7 @@ body {
     }
 }
 
-@import 'Lootboxes';
+
 .character-sheet {
     padding: 1rem 2rem;
 }

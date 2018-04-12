@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { randomInt, contain, keyboard, hitTestRectangle } from "./Helpers";
+import { randomInt, contain, keyboard, hitTestRectangle } from "../Helpers";
 
 const Application = PIXI.Application,
     Container = PIXI.Container,

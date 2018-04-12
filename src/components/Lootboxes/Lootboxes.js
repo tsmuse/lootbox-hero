@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { rolldice } from "./Helpers";
+import { rolldice } from "../../Helpers";
 
 
 class Lootboxes extends Component {
