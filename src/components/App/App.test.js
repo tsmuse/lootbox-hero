@@ -1,9 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+/* global jest test */
+import React from "react";
+import Enzyme, { shallow, render } from "enzyme";
+import Adaptor from "enzyme-adapter-react-16";
+import App from "./App";
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+
+Enzyme.configure({ adapter: new Adaptor() });
+//fix the crashing on pixi.js 
+jest.mock("pixi.js", () => {
+    return {
+        loader : {
+            resources: {}
+        },
+        utils : {
+            TextureCache: {}
+        }
+    };
+});
+
+test("renders without crashing", () => {
+    const wrapper = render(<App />);
 });
