@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
-import * as PIXI from "pixi.js";
-import { setupTreasureHunter, treasureHunter } from "../../microgames/TreasureHunter";
-import { setupPlaceholder, placeholderGame } from "../../microgames/PlaceholderGame";
+// import * as PIXI from "pixi.js";
+// import { setupTreasureHunter, treasureHunter } from "../../microgames/TreasureHunter";
+// import { setupPlaceholder, placeholderGame } from "../../microgames/PlaceholderGame";
+// import Phaser from "phaser-ce";
+import PIXI from 'expose-loader?PIXI!phaser-ce/build/custom/pixi.js';
+import p2 from 'expose-loader?p2!phaser-ce/build/custom/p2.js';
+import Phaser from 'expose-loader?Phaser!phaser-ce/build/custom/phaser-split.js';
+import { preloadTreasureHunterPhaser, createTreasureHunterPhaser, TreasureHunter } 
+    from "../../microgames/TreasureHunterPhaser";
 
-const Application = PIXI.Application,
-    Container = PIXI.Container,
-    loader = PIXI.loader,
-    resources = PIXI.loader.resources,
-    Graphics = PIXI.Graphics,
-    TextureCache = PIXI.utils.TextureCache,
-    Sprite = PIXI.Sprite,
-    Text = PIXI.Text,
-    TextStyle = PIXI.TextStyle;
+
+// const Application = PIXI.Application,
+//     Container = PIXI.Container,
+//     loader = PIXI.loader,
+//     resources = PIXI.loader.resources,
+//     Graphics = PIXI.Graphics,
+//     TextureCache = PIXI.utils.TextureCache,
+//     Sprite = PIXI.Sprite,
+//     Text = PIXI.Text,
+//     TextStyle = PIXI.TextStyle;
 
 
 class WorkGames extends Component {
@@ -21,12 +28,12 @@ class WorkGames extends Component {
         this.state = {
             gameOver : false
         };
-        this.game = new PIXI.Application({
-            width: 512,
-            height: 512,
-            antialiasing: false,
-            resolution: 1
-        });
+        // this.game = new PIXI.Application({
+        //     width: 512,
+        //     height: 512,
+        //     antialiasing: false,
+        //     resolution: 1
+        // });
         this.shiftList = this.props.shiftList;
         this.scenesToPlay = [];
         this.sceneTimer = 5;
@@ -37,20 +44,23 @@ class WorkGames extends Component {
         
         
         // bind the functions from each game module
-        this.setupTreasureHunter = setupTreasureHunter.bind(this);
-        this.treasureHunter = treasureHunter.bind(this);
-        this.setupPlaceholder = setupPlaceholder.bind(this);
-        this.placeholderGame = placeholderGame.bind(this);
+        // this.setupTreasureHunter = setupTreasureHunter.bind(this);
+        // this.treasureHunter = treasureHunter.bind(this);
+        // this.setupPlaceholder = setupPlaceholder.bind(this);
+        // this.placeholderGame = placeholderGame.bind(this);
 
     }
     componentDidMount() {
-        this.container.append(this.game.view);
-        loader.add("gameAssets/sprites/treasureHunter.json")
-            .load(this.setupGame);
+        // this.container.append(this.game.view);
+        // loader.add("gameAssets/sprites/treasureHunter.json")
+        //     .load(this.setupGame);
+        this.game = new Phaser.Game(512, 512, Phaser.AUTO, this.container, 
+            { preload: this.preload, create: this.create, update: this.update }
+        );
     }
     componentWillUnmount(){
-        this.game.destroy(true);
-        loader.reset();
+        // this.game.destroy(true);
+        // loader.reset();
         console.log("destroyed game");
     }
     render() {
@@ -65,6 +75,17 @@ class WorkGames extends Component {
         }
 
     }
+    preload(){
+        preloadTreasureHunterPhaser(this.game);
+    }
+    create(){
+        createTreasureHunterPhaser(this.game);
+        this.gameState = TreasureHunter;
+    }
+    update(){
+        this.gameState();
+    }
+
 
     setupGame() {
         // itterate through the game list and set up the games needed for this loop
@@ -80,12 +101,12 @@ class WorkGames extends Component {
             case "workGame07":
             case "workGame08":
             case "workGame09":
-                this.setupPlaceholder(game.name);
-                this.scenesToPlay.push(this.placeholderGame);
+                // this.setupPlaceholder(game.name);
+                // this.scenesToPlay.push(this.placeholderGame);
                 break;
             case "workGame10" : 
-                this.setupTreasureHunter();
-                this.scenesToPlay.push(this.treasureHunter);
+                // this.setupTreasureHunter();
+                // this.scenesToPlay.push(this.treasureHunter);
                 break;
             default:
                 console.error("Asked for a game that isn't in my list");
