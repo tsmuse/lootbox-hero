@@ -1,29 +1,19 @@
 /* global Phaser, p2, PIXI */
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
-// import * as PIXI from "pixi.js";
-// import { setupTreasureHunter, treasureHunter } from "../../microgames/TreasureHunter";
-// import { setupPlaceholder, placeholderGame } from "../../microgames/PlaceholderGame";
-// import Phaser from "phaser-ce";
+
+// This is TOTALLY not a good fix, but it was way faster than dealing with having to fix all the configuration stuff
+// from ejecting the app to add the expose-loader stuff to the webpack config files. 
+// TODO: figure out how to prune all the cruft I'm not using from this and eject the app so I can actually do this the
+//       correct way.
 /* eslint-disable */
 import PIXI from 'expose-loader?PIXI!phaser-ce/build/custom/pixi.js';
 import p2 from 'expose-loader?p2!phaser-ce/build/custom/p2.js';
 import Phaser from 'expose-loader?Phaser!phaser-ce/build/custom/phaser-split.js';
 /* eslint-enable */
+
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import { preloadTreasureHunterPhaser, createTreasureHunterPhaser, TreasureHunter } 
     from "../../microgames/TreasureHunterPhaser";
-
-
-// const Application = PIXI.Application,
-//     Container = PIXI.Container,
-//     loader = PIXI.loader,
-//     resources = PIXI.loader.resources,
-//     Graphics = PIXI.Graphics,
-//     TextureCache = PIXI.utils.TextureCache,
-//     Sprite = PIXI.Sprite,
-//     Text = PIXI.Text,
-//     TextStyle = PIXI.TextStyle;
-
 
 class WorkGames extends Component {
     constructor(props) {
@@ -31,12 +21,6 @@ class WorkGames extends Component {
         this.state = {
             gameOver : false
         };
-        // this.game = new PIXI.Application({
-        //     width: 512,
-        //     height: 512,
-        //     antialiasing: false,
-        //     resolution: 1
-        // });
         this.shiftList = this.props.shiftList;
         this.scenesToPlay = [];
         this.sceneTimer = 5;
@@ -44,19 +28,10 @@ class WorkGames extends Component {
         this.setupGame = this.setupGame.bind(this);
         // define the scenes for each microgame
         this.placeholderScenes = [];
-        
-        
-        // bind the functions from each game module
-        // this.setupTreasureHunter = setupTreasureHunter.bind(this);
-        // this.treasureHunter = treasureHunter.bind(this);
-        // this.setupPlaceholder = setupPlaceholder.bind(this);
-        // this.placeholderGame = placeholderGame.bind(this);
+        // bind the functions from each game module?
 
     }
     componentDidMount() {
-        // this.container.append(this.game.view);
-        // loader.add("gameAssets/sprites/treasureHunter.json")
-        //     .load(this.setupGame);
         this.game = new Phaser.Game(512, 512, Phaser.AUTO, this.container, 
             { preload: this.preload, create: this.create, update: this.update }
         );
@@ -89,7 +64,7 @@ class WorkGames extends Component {
         this.gameState();
     }
 
-
+    // Old setup method. Most of this logic needs to move into the new one
     setupGame() {
         // itterate through the game list and set up the games needed for this loop
         for(let name in this.shiftList){
@@ -125,9 +100,6 @@ class WorkGames extends Component {
         this.game.ticker.add(delta => this.gameLoop(delta));
     }
 
-    gameLoop(delta){
-        this.gameState(delta);
-    }
     switchGame(){
         console.log("switch!");
         let nextScene = this.scenesToPlay.shift();
@@ -145,7 +117,6 @@ class WorkGames extends Component {
         }
         
     }
-
     scoreGame(){
         let cashEarned = 0;
         this.scores.forEach((success, index) =>{
