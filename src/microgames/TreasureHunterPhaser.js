@@ -120,7 +120,7 @@ function treasureHunter(game){
     // check if the treasure made it to the door
     game.physics.arcade.overlap(treasure, door, (treasure,door) => {
         game.scores.push(true);
-        game.state.start("gameOver");
+        game.state.start("switch");
     });
 
     // move the explorer around based on arrow keys

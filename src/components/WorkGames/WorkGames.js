@@ -33,7 +33,8 @@ class WorkGames extends Component {
             height: 512,
             renderer: Phaser.AUTO,
             antialias: false,
-            parent: this.container
+            parent: this.container,
+            enableDebug: false
             // state: {
             //     preload: this.preloadWorkIntro, 
             //     create: this.createWorkIntro, 
@@ -210,6 +211,7 @@ class WorkGames extends Component {
         }
     }
     end(){
+        this.game.pendingDestroy = true;
         this.setState({gameOver: true});
     }
 }

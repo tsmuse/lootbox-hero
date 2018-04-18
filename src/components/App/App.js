@@ -44,19 +44,7 @@ class App extends Component {
             "isLoaded" : false,
             "player" : {}
         };
-        this.workGamesLibrary = [
-            { name: "workGame01", value: 10 },
-            { name: "workGame02", value: 10 },
-            { name: "workGame03", value: 10 },
-            { name: "workGame04", value: 10 },
-            { name: "workGame05", value: 10 },
-            { name: "workGame06", value: 10 },
-            { name: "workGame07", value: 20 },
-            { name: "workGame08", value: 30 },
-            { name: "workGame09", value: 50 },
-            { name: "workGame10", value: 100 }
-        ];
-        this.shiftLength = 4; // need to figure out where this should live
+        
         this.handleLootboxChange = this.handleLootboxChange.bind(this);
         this.handleBuyLootbox = this.handleBuyLootbox.bind(this);
         this.handleEquipItem = this.handleEquipItem.bind(this);
@@ -125,16 +113,7 @@ class App extends Component {
             return newState;
         });
     }
-    // updateCashPostGameCycle(gameResult){
-    //     var result = JSON.parse(gameResult);
-    //     localStorage.removeItem("testGame");
-    //     this.setState(function (prevState, props){
-    //         var newState = this.rebuildPlayer(prevState);
-    //         newState.player.cash += result.cash;
-
-    //         return newState;
-    //     });
-    // }
+   
     render(){
         const { error, isLoaded, player } = this.state;
         if(error){
@@ -166,8 +145,7 @@ class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/grind" component={GrindGames} />
                         <Route exact path="/work"  render={props => (
-                            <WorkGames shiftList={this.generateWorkList()}
-                                workCompleteHandler = {this.handleWorkComplete} />
+                            <WorkGames workCompleteHandler = {this.handleWorkComplete} />
                         )} />
                         <Route exact path="/crate-store" render={props => (
                             <CrateStore playerCrateCash={this.state.player.crateCash}
@@ -204,23 +182,7 @@ class App extends Component {
         }
     }
 
-    generateWorkList(){
-        let gameList = {};
-        for( let i = 0; i < this.shiftLength; i++){
-            let game = this.workGamesLibrary[rolldice(10)-1],
-                keys = Object.keys(gameList);
-            // check for duplicate rolls and keep rolling until we don't have a dupe
-            while(keys.length > 0 && keys.indexOf(game.name) !== -1){
-                game = this.workGamesLibrary[rolldice(10) - 1];
-            }
-            gameList[game.name] = game;
-        }
-        // for testing/debugging a specific game
-        gameList = {"workGame10": this.workGamesLibrary[9]};
-
-        return gameList;
-        
-    }
+    
     handleLootboxChange(lootbox) {
         this.setState(function (prevState, props) {
             var newState = this.rebuildPlayer(prevState);
