@@ -6,5 +6,5 @@ import "./lootboxhero.css";
 import registerServiceWorker from "./registerServiceWorker";
 
 ReactDOM.render(<App />, 
-    document.getElementById("root"));
+    document.getElementById("reactRoot"));
 registerServiceWorker();

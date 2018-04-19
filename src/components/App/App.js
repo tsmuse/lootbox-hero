@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import { rolldice } from "../../Helpers";
 import Lootboxes from "../Lootboxes/Lootboxes";
-import CharacterStats from "../CharacterStats/CharacterStats";
-import CharacterInventory from "../CharacterInventory/CharacterInventory";
-import CharacterEquipped from "../CharacterEquipped/CharacterEquipped";
 import CrateStore from "../CrateStore/CrateStore";
 import WorkGames from "../WorkGames/WorkGames";
+import PlayerSheet from "../PlayerSheet/PlayerSheet";
 
 // placeholder "pages" to stub out the rest of the pages needed
 function Home(props){
@@ -149,32 +147,24 @@ class App extends Component {
                         )} />
                         <Route exact path="/crate-store" render={props => (
                             <CrateStore playerCrateCash={this.state.player.crateCash}
-                                buyItemHandler={this.handleBuyItem} />
+                                buyItemHandler={this.handleBuyItem} 
+                            />
                         )} />
                         <Route exact path="/player" render={props => (
-                            
-                            <section className="character-sheet">
-                                <CharacterStats playerAbilities={this.state.player.abilities}
-                                    playerCash={this.state.player.cash}
-                                    playerCrateCash={this.state.player.crateCash}
-                                    playerScore={this.state.player.score}
-                                    playerUnopenedBoxes={this.state.player.unopenedBoxes} />
-                                <CharacterEquipped playerEquipped={this.state.player.equipped}
-                                    playerMount={this.state.player.mount}
-                                    unequipItemHandler={this.handleUnequipItem} />
-                                <CharacterInventory loot={this.state.player.loot}
-                                    mountEquipped={this.state.player.mount.equipped}
-                                    equipItemHandler={this.handleEquipItem}
-                                    junkItemHandler={this.handleJunkItem} />
-                            </section>
+                            <PlayerSheet player={this.state.player}
+                                unequipItemHandler={this.handleUnequipItem}
+                                equipItemHandler={this.handleEquipItem}
+                                junkItemHandler={this.handleJunkItem}
+                            />
                         )} />
                         <Route exact path="/lootboxes" render={props => (
                             <Lootboxes
                                 lootboxChangeHandler={this.handleLootboxChange}
                                 buyLootboxHandler={this.handleBuyLootbox}
                                 lastBox={this.state.player.lastBox}
-                                playerCash={this.state.player.cash}
-                                playerUnopenedBoxes={this.state.player.unopenedBoxes} />
+                                playerCash={this.state.player.currency.cash}
+                                playerUnopenedBoxes={this.state.player.currency.unopenedBoxes} 
+                            />
                         )} />
                     </React.Fragment>
                 </Router>
@@ -186,14 +176,14 @@ class App extends Component {
     handleLootboxChange(lootbox) {
         this.setState(function (prevState, props) {
             var newState = this.rebuildPlayer(prevState);
-            newState.player["lastBox"] = lootbox;
-            newState.player["boxesOpened"] = prevState.player.boxesOpened + 1;
-            newState.player["unopenedBoxes"] = prevState.player.unopenedBoxes - 1;
+            newState.player.lastBox = lootbox;
+            newState.player.boxesOpened = prevState.player.boxesOpened + 1;
+            newState.player.currency.unopenedBoxes = prevState.player.currency.unopenedBoxes - 1;
             var inventory = prevState.player.loot;
             for (let item of lootbox) {
                 inventory[item.id] = item;
             }
-            newState.player["loot"] = inventory;
+            newState.player.loot = inventory;
             return newState;
         });
 
@@ -204,8 +194,8 @@ class App extends Component {
         // the real buy screen
         this.setState(function (prevState, props) {
             var newState = this.rebuildPlayer(prevState);
-            newState.player.cash -= 3;
-            newState.player.unopenedBoxes += 1;
+            newState.player.currency.cash -= 3;
+            newState.player.currency.unopenedBoxes += 1;
             newState = this.updateScore(newState);
             return newState;
         });
@@ -255,7 +245,7 @@ class App extends Component {
         this.setState(function (prevState, props) {
             var newState = this.rebuildPlayer(prevState);
             newState.player.loot[boughtItem.id] = boughtItem.item;
-            newState.player.crateCash -= boughtItem.price;
+            newState.player.currency.crateCash -= boughtItem.price;
             return newState;
         });
     }
@@ -288,25 +278,25 @@ class App extends Component {
     calculateCrateCash(newState, newJunk) {
         switch (newJunk.tier) {
         case 1:
-            newState.player.crateCash += 100;
+            newState.player.currency.crateCash += 100;
             break;
         case 2:
-            newState.player.crateCash += 50;
+            newState.player.currency.crateCash += 50;
             break;
         case 3:
-            newState.player.crateCash += 25;
+            newState.player.currency.crateCash += 25;
             break;
         case 4:
-            newState.player.crateCash += 12;
+            newState.player.currency.crateCash += 12;
             break;
         case 5:
-            newState.player.crateCash += 6;
+            newState.player.currency.crateCash += 6;
             break;
         case 6:
-            newState.player.crateCash += 3;
+            newState.player.currency.crateCash += 3;
             break;
         case 7:
-            newState.player.crateCash += 2;
+            newState.player.currency.crateCash += 2;
             break;
         default:
             break;
@@ -326,8 +316,8 @@ class App extends Component {
     rebuildPlayer(prevState) {
         // if no paramaters were given after prevState assume all 
         
-        var keys = ["abilities", "BASE_ABILITIES", "boxesOpened", "cash", "crateCash", "equipped", 
-            "lastBox", "loot", "mount", "name", "score", "unopenedBoxes"];
+        var keys = ["abilities", "BASE_ABILITIES", "boxesOpened", "currency", "equipped", 
+            "lastBox", "loot", "mount", "name", "sprite"];
         var dupePlayer = { "player": {} };
 
         for (let key of keys) {
@@ -457,7 +447,7 @@ class App extends Component {
         for (let score in currentAbilities) {
             scoreImprovement += currentAbilities[score] - baseAbilities[score];
         }
-        newState.player.score = scoreImprovement + newState.player.cash;
+        newState.player.currency.score = scoreImprovement + newState.player.currency.cash;
         return newState;
     }
 }

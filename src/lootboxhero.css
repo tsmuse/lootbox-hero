@@ -1,8 +1,12 @@
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
 * {
   box-sizing: border-box; }
 
 body {
-  font-size: 16px; }
+  font-family: "Press Start 2P", cursive;
+  background-color: #000;
+  color: #fff;
+  font-size: 13px; }
 
 .hidden {
   display: none; }
@@ -20,33 +24,171 @@ body {
     flex: 1;
     padding: 0.5rem;
     text-align: center; }
+  .top-nav ul {
+    margin: 0; }
 
 .character-sheet {
-  padding: 1rem 2rem; }
+  display: grid;
+  grid-template-columns: 1.75fr 1fr;
+  padding: 1rem 2rem;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto; }
+
+.player-stats-equipped-gCol {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: minmax(275px, 1fr) repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  grid-row-gap: 0.75rem; }
+
+.inventory-gCol {
+  grid-column: 2; }
 
 .stats-block {
+  grid-column: 1 / 2;
+  grid-row: 1;
   display: inline-block;
   vertical-align: top;
-  margin-right: 1rem;
-  min-width: 350px; }
+  padding: 1rem;
+  min-width: 275px;
+  background-color: #444;
+  border-top: 5px solid #222;
+  border-right: 5px solid #555;
+  border-bottom: 5px solid #666;
+  border-left: 5px solid #333; }
 
-.equipped-items {
-  display: inline-block;
-  vertical-align: top;
-  margin-right: 1rem;
-  min-width: 350px; }
+.stats-label {
+  margin: 0 0 0.75rem; }
+
+.stat-row {
+  line-height: 1.3rem; }
+
+.stat-value {
+  padding: 0 0 0 0.75rem;
+  text-align: right; }
+
+.equipped-items-col1 {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  padding: 1rem; }
+
+.equipped-items-col2 {
+  grid-column: 3 / span 2;
+  grid-row: 2;
+  padding: 1rem; }
+
+.equipment-slot {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 1rem; }
+
+.slot-title {
+  flex: 1 1 100%;
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem; }
+
+.slot-icon {
+  flex: 0 1 64px; }
+  .slot-icon img {
+    width: 100%;
+    max-width: 64px; }
+
+.slot-text {
+  flex: 3;
+  padding: 0 0 0 0.75rem; }
+
+.equipped-item {
+  font-size: 1.1rem;
+  margin: 0; }
+
+.equipped-item-stats {
+  font-size: 0.7rem; }
+
+.naked {
+  font-size: 0.7rem;
+  color: red; }
+
+.empty-title {
+  margin: 0; }
 
 .inventory {
-  padding: 1.5rem;
-  border: 1px solid #000;
+  padding: 0.75rem 1rem 1rem;
+  background-color: #666;
+  border-top: 5px solid #444;
+  border-right: 5px solid #777;
+  border-bottom: 5px solid #888;
+  border-left: 5px solid #555;
   display: inline-block;
-  max-height: 600px;
-  overflow-y: scroll;
-  min-width: 350px; }
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll; }
 
-.inventory-item-stats,
-.equipped-item-stats {
+.inventory-list {
+  list-style: none; }
+
+.inventory-item-stats {
   font-size: 0.8rem; }
+
+.character-sprites {
+  grid-column: 2 / span 3;
+  grid-row: 1;
+  padding: 1rem 1rem 0;
+  border-top: 5px solid #000; }
+
+.player-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem; }
+
+.currency-bar {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  margin: 0 0 1rem;
+  width: 100%; }
+
+.player-currency {
+  display: flex;
+  align-items: center;
+  flex: 1 0;
+  padding: 0 0.5rem; }
+
+.currency-icon {
+  flex: 0 0 32px;
+  padding: 0;
+  margin: 0 0.5rem 0 0; }
+
+.currency-label {
+  flex: 1;
+  font-size: 0.85rem;
+  line-height: 1.4rem; }
+
+.currency-value {
+  flex: 1;
+  margin: 0;
+  font-size: 1.3rem; }
+
+.sprites-area {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 250px;
+  padding: 1rem 1rem 0; }
+
+.player-sprite {
+  margin: 0 1rem 0 0;
+  flex: 1 0 128px; }
+  .player-sprite img {
+    width: 100%;
+    max-width: 256px; }
+
+.mount-sprite {
+  flex: 1 0 128px; }
+  .mount-sprite img {
+    width: 100%;
+    max-width: 256px; }
 
 .lootboxes {
   padding: 1rem; }
@@ -69,7 +211,7 @@ body {
     margin: 0 0 0.5rem; }
 
 .item-card {
-  border: 1px solid #000;
+  border: 1px solid #aaa;
   padding: 1rem; }
   .item-card .item-name {
     font-size: 1.5rem;

@@ -37,6 +37,7 @@ class CharacterInventory extends Component {
         var lootToRender = this.filterForRender(this.props.loot);
         return (
             <section className="inventory">
+                <h2 className="stats-label">Inventory</h2>
                 <ul className="inventory-list">
                     {   
                         lootToRender.map((loot, index) => {

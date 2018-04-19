@@ -1,0 +1,23 @@
+.character-sheet {
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    padding: 1rem 2rem;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.player-stats-equipped-gCol {
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: minmax(275px, 1fr) repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    grid-row-gap: 0.75rem;
+}
+
+.inventory-gCol {
+    grid-column: 2;
+    
+}
+
+

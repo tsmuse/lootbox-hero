@@ -1,4 +1,9 @@
-{
+/* global jest test */
+import React from "react";
+import { shallow } from "enzyme";
+import PlayerSheet from "./PlayerSheet";
+
+const fakePlayer = {
     "name": "Mysterious Stranger",
     "abilities": {
         "str": 10,
@@ -34,16 +39,9 @@
         "mountHead": "naked",
         "mountBody": "naked",
         "mountFeet": "naked",
-        "mountPet": "naked",
-        "sprite": {
-            "base": "https://dummyimage.com/256/ff00b7/fff.png",
-            "head": "",
-            "shirt": "",
-            "pants": "",
-            "shoes": ""
-        }
+        "mountPet": "naked"
     },
-    "BASE_ABILITIES" : {
+    "BASE_ABILITIES": {
         "str": 10,
         "dex": 10,
         "int": 10,
@@ -55,20 +53,21 @@
     },
     "loot": {},
     "lastBox": [],
-    "currency": {
-        "cash": 100,
-        "crateCash": 0,
-        "unopenedBoxes": 4,
-        "score": 0
-    },
     "boxesOpened": 0,
-    "sprite": {
-        "base": "https://dummyimage.com/256/ff00b7/fff.png",
-        "head": "",
-        "shirt": "",
-        "pants": "",
-        "shoes": "",
-        "mainHand": "",
-        "offHand": ""
-    }
+    "cash": 100,
+    "crateCash": 0,
+    "unopenedBoxes": 4,
+    "score": 100
 }
+const fakeEventHandler = (e) => undefined;
+test("renders without crashing", () => {
+    
+
+    shallow(
+        <PlayerSheet player = { fakePlayer }
+            unequipItemHandler = { fakeEventHandler }
+            equipItemHandler={ fakeEventHandler }
+            junkItemHandler={ fakeEventHandler }
+        />
+    );
+});

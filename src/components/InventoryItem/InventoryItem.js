@@ -1,16 +1,21 @@
 import React from "react";
 
 function InventoryItem(props) {
+    const { lootStats: stats } = props;
     return (
         <li className="intentory-item" >
             <p className="inventory-item-name">
                 {props.lootName}
             </p>
             <p className="inventory-item-stats">
-                Str: +{props.lootStats.str}, Dex: +{props.lootStats.dex},
-                    Int: +{props.lootStats.int}, Wis: +{props.lootStats.wis},
-                    Sex: +{props.lootStats.sex}, Brand: +{props.lootStats.brand},
-                    Luck: +{props.lootStats.luck}, Credit: +{props.lootStats.credit}
+                {stats.str ? `Str: +${stats.str} ` : ""}
+                {stats.dex ? `Dex: +${stats.dex} ` : ""}
+                {stats.int ? `Int: +${stats.int} ` : ""}
+                {stats.wis ? `Wis: +${stats.wis} ` : ""}
+                {stats.sex ? `Sex: +${stats.sex} ` : ""}
+                {stats.brand ? `Brand: +${stats.brand} ` : ""}
+                {stats.luck ? `Luck: +${stats.luck} ` : ""}
+                {stats.credit ? `Credit: +${stats.credit} ` : ""}
             </p>
             <button className="inventory-equip-btn" onClick={props.handleEquipButton}
                 data-item-index={props.lootID} disabled={props.equipDisabled}>

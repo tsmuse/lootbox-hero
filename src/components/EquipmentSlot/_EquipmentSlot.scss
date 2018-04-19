@@ -1,0 +1,40 @@
+.equipment-slot {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0 1rem;
+}
+
+.slot-title {
+    flex: 1 1 100%;
+    font-size: 0.9rem;
+    margin: 0 0 0.75rem;
+}
+.slot-icon {
+    flex: 0 1 64px;
+
+    img {
+        width:100%;
+        max-width: 64px;
+    }
+}
+.slot-text {
+    flex: 3;
+    padding: 0 0 0 0.75rem;
+}
+.equipped-item {
+    font-size: 1.1rem;
+    margin: 0;
+
+}
+.equipped-item-stats {
+    font-size: 0.7rem;
+}
+
+.naked {
+    font-size: 0.7rem;
+    color: red;
+}
+.empty-title {
+    margin: 0;
+}

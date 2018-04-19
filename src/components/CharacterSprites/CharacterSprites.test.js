@@ -1,4 +1,9 @@
-{
+/* global jest test */
+import React from "react";
+import { shallow } from "enzyme";
+import CharacterSprites from "./CharacterSprites";
+
+const fakePlayer = {
     "name": "Mysterious Stranger",
     "abilities": {
         "str": 10,
@@ -43,7 +48,7 @@
             "shoes": ""
         }
     },
-    "BASE_ABILITIES" : {
+    "BASE_ABILITIES": {
         "str": 10,
         "dex": 10,
         "int": 10,
@@ -71,4 +76,18 @@
         "mainHand": "",
         "offHand": ""
     }
-}
+};
+
+const fakeEventHandler = (e) => undefined;
+
+test("renders without crashing", () => {
+    shallow(
+        <CharacterSprites
+            playerSprite={fakePlayer.sprite}
+            mountSprite={fakePlayer.mount.sprite}
+            playerName={fakePlayer.name}
+            playerCurrency={fakePlayer.currency}
+
+        />
+    );
+});

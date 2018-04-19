@@ -1,10 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
 * { 
     box-sizing: border-box;
 }
 
 body {
-    font-size: 16px;
+    font-family: "Press Start 2P", cursive;
+    background-color: #000;
+    color: #fff;
+    font-size: 13px;
 }
 
 @import "components/App/App";
+@import "components/PlayerSheet/PlayerSheet";
+@import "components/CharacterStats/CharacterStats";
+@import "components/CharacterEquipped/CharacterEquipped";
+@import "components/EquipmentSlot/EquipmentSlot";
+@import "components/CharacterInventory/CharacterInventory";
+@import "components/InventoryItem/InventoryItem";
+@import "components/CharacterSprites/CharacterSprites";
 @import "components/Lootboxes/Lootboxes";

@@ -1,0 +1,72 @@
+.character-sprites {
+    grid-column: 2 / span 3;
+    grid-row: 1;
+    padding: 1rem 1rem 0;
+    border-top: 5px solid #000;
+}
+
+.player-name {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+}
+
+.currency-bar {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    margin: 0 0 1rem;
+    width: 100%;
+}
+
+.player-currency {
+    display: flex;
+    align-items: center;
+    
+    flex: 1 0;
+    padding: 0 0.5rem;
+}
+
+.currency-icon {
+    flex: 0 0 32px;
+    padding: 0;
+    margin: 0 0.5rem 0 0;
+}
+.currency-label {
+    flex: 1;
+    font-size: 0.85rem;
+    line-height: 1.4rem;
+}
+
+.currency-value {
+    flex: 1;
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.sprites-area {
+    display:flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 250px;
+    padding: 1rem 1rem 0;
+}
+
+.player-sprite {
+    margin: 0 1rem 0 0;
+    flex: 1 0 128px;
+
+    
+    img {
+        width: 100%;
+        max-width: 256px;
+    }
+}
+
+.mount-sprite {
+    flex: 1 0 128px;
+    img {
+        width: 100%;
+        max-width: 256px;
+    }
+}

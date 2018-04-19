@@ -127,6 +127,7 @@ class Lootboxes extends Component {
         item["equipped"] = false;
         item["type"] = this.getItemType();
         item["variation"] = rolldice(10);
+        item["icon"] = "https://dummyimage.com/64/ff00b7/fff.png";
         // These entries will eventually be values in a loot table look up based on type and
         // variation. For now just filling them with placeholders.
         item["name"] = this.state.lootTable[item.type][item.tier][item.variation].name;
