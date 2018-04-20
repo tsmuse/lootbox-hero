@@ -5,6 +5,13 @@ import CharacterEquipped from "../CharacterEquipped/CharacterEquipped";
 import CharacterSprites from "../CharacterSprites/CharacterSprites";
 
 class PlayerSheet extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            visibleEquipment: "player"
+        };
+        this.handleEquippedSwitch = this.handleEquippedSwitch.bind(this);
+    }
     render() {
         const player = this.props.player;
         return (
@@ -15,11 +22,14 @@ class PlayerSheet extends Component{
                     <CharacterSprites 
                         playerSprite={player.sprite}
                         mountSprite={player.mount.sprite}
+                        mountEquipped={player.mount.equipped}
                         playerName={player.name}
                         playerCurrency={player.currency}
+                        switchEquippedHandler={this.handleEquippedSwitch}
                     />
                     <CharacterEquipped playerEquipped={player.equipped}
                         playerMount={player.mount}
+                        equippedToShow={this.state.visibleEquipment}
                         unequipItemHandler={this.props.unequipItemHandler} 
                     />
                 </section>
@@ -32,6 +42,10 @@ class PlayerSheet extends Component{
                 </section>
             </section>
         );
+    }
+
+    handleEquippedSwitch(activeEquipped){
+        this.setState({visibleEquipment: activeEquipped});
     }
 }
 

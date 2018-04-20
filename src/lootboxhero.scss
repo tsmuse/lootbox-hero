@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
+$two-col-inventory-breakpoint: 1400px;
 * { 
     box-sizing: border-box;
 }
@@ -9,6 +10,24 @@ body {
     background-color: #000;
     color: #fff;
     font-size: 13px;
+}
+
+button {
+    padding: 3px 9px;
+    background-color: #ddd;
+    border-top: 3px solid #999;
+    border-left: 3px solid #aaa;
+    border-bottom: 3px solid #fff;
+    border-right: 3px solid #ddd;
+
+    &:hover {
+        background-color: #555;
+        color:#fff;
+        border-top: 3px solid #333;
+        border-left: 3px solid #444;
+        border-bottom: 3px solid #999;
+        border-right: 3px solid #777;
+    }
 }
 
 @import "components/App/App";

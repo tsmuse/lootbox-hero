@@ -42,9 +42,7 @@ class CharacterInventory extends Component {
                     {   
                         lootToRender.map((loot, index) => {
                             return (<InventoryItem key={`0${loot.id}_${loot.type}`}
-                                lootName={loot.name}
-                                lootID={loot.id}
-                                lootStats={loot.stats}
+                                loot={loot}
                                 handleEquipButton={this.handleEquipButton}
                                 handleJunkButton={this.handleJunkButton}
                                 equipDisabled={this.shouldDisable(loot, this.props.mountEquipped)}

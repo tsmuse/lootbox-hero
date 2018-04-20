@@ -66,6 +66,7 @@ test("renders without crashing", () => {
     shallow(
         <CharacterEquipped playerEquipped={fakePlayer.equipped}
             playerMount={fakePlayer.mount}
+            equippedToShow="player"
             unequipItemHandler={fakeEventHandler}
         />
     );

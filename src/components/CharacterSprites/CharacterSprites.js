@@ -1,8 +1,14 @@
 import React, { Component } from "react";
-
+import SpriteButton from "../SpriteButton/SpriteButton";
+         
 class CharacterSprites extends Component {
+    constructor(props){
+        super(props);
+        this.mountSpriteClickHandler = this.mountSpriteClickHandler.bind(this);
+        this.playerSpriteClickHandler = this.playerSpriteClickHandler.bind(this);
+    }
     render (){
-        const {playerSprite, mountSprite, playerName, playerCurrency} = this.props;
+        const {playerSprite, playerName, playerCurrency, mountEquipped} = this.props;
         return (
             <section className="character-sprites">
                 <h1 className="player-name">{playerName}</h1>
@@ -33,21 +39,35 @@ class CharacterSprites extends Component {
                     </li>
                 </ul>
                 <div className="sprites-area">
-                    {/* 
-                        current plan is to layer PNGs on top of eachother, but this might be
-                        stupidly complicated/resource intensive. This might need to be an image
-                        that gets generated on the backend, but that could also be stupidly
-                        expensive...final implimentation still TBD
-                    */}
-                    <div className="player-sprite">
-                        <img src={playerSprite.base} alt="Player sprite placeholder" />
-                    </div>
-                    <div className="mount-sprite">
-                        <img src={mountSprite.base} alt="Mount sprite placeholder" />
-                    </div>
+                    <SpriteButton className="player-sprite" 
+                        sprite={playerSprite} 
+                        alt="Player sprite placeholder"
+                        onClick={this.playerSpriteClickHandler}
+                    />
+                    {this.shouldRenderMount(mountEquipped)}
                 </div>
             </section>
         );
+    }
+    playerSpriteClickHandler(){
+        this.props.switchEquippedHandler("player");
+    }
+    mountSpriteClickHandler(){
+        this.props.switchEquippedHandler("mount");
+    }
+    shouldRenderMount(flag){
+        if(flag){
+            return (
+                <SpriteButton className="player-sprite"
+                    sprite={this.props.mountSprite}
+                    alt="Mount sprite placeholder"
+                    onClick={this.mountSpriteClickHandler}
+                />
+            );
+        }
+        else{
+            return "";
+        }
     }
 }
 

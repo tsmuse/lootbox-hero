@@ -6,6 +6,7 @@ import InventoryItem from "./InventoryItem";
 const fakeLoot = {
     name: "",
     id: "",
+    type: "",
     stats: {
         "str": 10,
         "dex": 10,
@@ -22,12 +23,10 @@ const fakeEventHandler = (e) => undefined;
 
 test("renders without crashing", () => {
     shallow(
-        <InventoryItem key={`test_key`}
-            lootName={fakeLoot.name}
-            lootID={fakeLoot.id}
-            lootStats={fakeLoot.stats}
+        <InventoryItem key={`0${fakeLoot.id}_${fakeLoot.type}`}
+            loot={fakeLoot}
             handleEquipButton={fakeEventHandler}
-            handleJunkButton={fakeEventHandler}
+            handleJunkButton={fakeLoot}
             equipDisabled={false}
         />
     );

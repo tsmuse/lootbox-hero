@@ -36,7 +36,7 @@
         "mountFeet": "naked",
         "mountPet": "naked",
         "sprite": {
-            "base": "https://dummyimage.com/256/ff00b7/fff.png",
+            "base": "https://dummyimage.com/256/ff00b7/fff.png&text=256x256+mount+sprite",
             "head": "",
             "shirt": "",
             "pants": "",
@@ -63,7 +63,7 @@
     },
     "boxesOpened": 0,
     "sprite": {
-        "base": "https://dummyimage.com/256/ff00b7/fff.png",
+        "base": "http://localhost:3000/placeholder_bot.png",
         "head": "",
         "shirt": "",
         "pants": "",
