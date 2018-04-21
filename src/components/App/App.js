@@ -253,7 +253,9 @@ class App extends Component {
     removeEquipped(newState, unequippedItem) {
         if (unequippedItem.type !== "mount") {
             if (unequippedItem.type === "mountHead" || unequippedItem.type === "mountBody"
-                || unequippedItem.type === "mountFeet" || unequippedItem.type === "mountpet") {
+                || unequippedItem.type === "mountFeet" || unequippedItem.type === "mountpet") 
+            {   
+                newState.mount.sprite[unequippedItem.type] = "";
                 newState.player.mount[unequippedItem.type] = "naked";
             }
             else if (unequippedItem.type === "finger") {
@@ -265,6 +267,7 @@ class App extends Component {
                 }
             }
             else {
+                newState.player.sprite[unequippedItem.type] = "";
                 newState.player.equipped[unequippedItem.type] = "naked";
             }
         }
@@ -355,12 +358,20 @@ class App extends Component {
                     newState.player.mount.mountPet = "naked";
                 }
             }
+            //update the mount sprite
+            if(newEquipped.sprite){
+                newState.player.mount.sprite.base = newEquipped.sprite;
+            }
             newState.player.mount = newEquipped;
         }
         else if (newEquipped.type === "mountHead" || newEquipped.type === "mountBody" ||
             newEquipped.type === "mountFeet" || newEquipped.type === "mountPet") {
             if (newState.player.mount[newEquipped.type] !== "naked") {
                 newState.player.mount[newEquipped.type].equipped = false;
+            }
+            // update the mount sprite
+            if(newEquipped.sprite){
+                newState.player.mount.sprite[newEquipped.type] = newEquipped.sprite;
             }
             newState.player.mount[newEquipped.type] = newEquipped;
         }
@@ -383,6 +394,10 @@ class App extends Component {
             // check if the slot is already full, if so put the old item back in invetory
             if (newState.player.equipped[newEquipped.type] !== "naked") {
                 newState.player.equipped[newEquipped.type].equipped = false;
+            }
+            // Update the player sprite
+            if(newEquipped.sprite){
+                newState.player.sprite[newEquipped.type] = newEquipped.sprite;
             }
             newState.player.equipped[newEquipped.type] = newEquipped;
         }

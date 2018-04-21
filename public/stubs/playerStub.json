@@ -36,11 +36,11 @@
         "mountFeet": "naked",
         "mountPet": "naked",
         "sprite": {
-            "base": "https://dummyimage.com/256/ff00b7/fff.png&text=256x256+mount+sprite",
-            "head": "",
-            "shirt": "",
-            "pants": "",
-            "shoes": ""
+            "base": "",
+            "mountHead": "",
+            "mountBody": "",
+            "mountFeet": "",
+            "mountPet": ""
         }
     },
     "BASE_ABILITIES" : {
@@ -65,10 +65,12 @@
     "sprite": {
         "base": "http://localhost:3000/placeholder_bot.png",
         "head": "",
-        "shirt": "",
-        "pants": "",
-        "shoes": "",
-        "mainHand": "",
-        "offHand": ""
+        "chest": "",
+        "legs": "",
+        "feet": "",
+        "hands": "",
+        "weaoponMain": "",
+        "weaponOff": "",
+        "companion": ""
     }
 }

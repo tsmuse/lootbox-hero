@@ -12,8 +12,9 @@ class Lootboxes extends Component {
             "lootTable" : {}
         };
     }
+    //
     *generateLootIDs(){
-        var seed = 0;
+        var seed = Math.round(Date.now()* Math.random() + this.props.playerCash);
         while(true){
             yield seed;
             seed ++;
@@ -123,9 +124,11 @@ class Lootboxes extends Component {
     }
 
     buildNewItem(item) {
+        const { type, sprite } = this.getItemType();
         item["id"] = this.lootID.next().value;
         item["equipped"] = false;
-        item["type"] = this.getItemType();
+        item["type"] = type;
+        item["sprite"] = sprite;
         item["variation"] = rolldice(10);
         item["icon"] = "https://dummyimage.com/64/ff00b7/fff.png";
         // These entries will eventually be values in a loot table look up based on type and
@@ -157,51 +160,65 @@ class Lootboxes extends Component {
         // Roll a d200 to figure out which type, this will probably need to change once there are
         // actual items in each one? Maybe I can just switch on lootType % 10 to get the specifics?
         // TBD.
+        // WIll need to figure out a better way to assign a sprite to each relevant piece of loot
+        // Right now just dropping them in to the output of the table because I only have one 
+        // sprite for each loot type that displays in the UI. Note: that a loot sprite is what
+        // displays on the character in the player screen when it is wearing an item, and that
+        // is different than the loot icon, which displays in the equipped and inventory screens 
         const lootType = rolldice(20);
         
         switch(lootType){
         case 1: 
-            return "head";
+            return {type: "head", sprite:"http://localhost:3000/placeholder_bot_head_item.png" };
         case 2:
-            return "hands";
+                return { type: "hands", sprite: "http://localhost:3000/placeholder_bot_hands_item.png"};
         case 3:
-            return "shoulders";
+            return { type: "shoulders", sprite: ""};
         case 4:
-            return "chest";  
+                return { type: "chest", sprite: "http://localhost:3000/placeholder_bot_chest_item.png"};  
         case 5:
-            return "legs";
+                return { type: "legs", sprite: "http://localhost:3000/placeholder_bot_legs_item.png"};
         case 6:
-            return "knees";
+            return { type: "knees", sprite: ""};
         case 7:
-            return "feet";
+                return { type: "feet", sprite: "http://localhost:3000/placeholder_bot_feet_item.png"};
         case 8:
-            return "neck";
+            return { type: "neck", sprite: "" };
         // There are two fingers here because there are two finger slots on the character and every
         // slot has an equal chance of coming up by design
         case 9:
-            return "finger";
+            return { type: "finger", sprite: ""};
         case 10:
-            return "finger";
+            return { type: "finger", sprite: ""};
         case 11:
-            return "lbPocket";
+            return { type: "lbPocket", sprite: ""};
         case 12:
-            return "backpack";
+            return { type: "backpack", sprite: ""};
         case 13:
-            return "companion";
+                return { type: "companion", sprite: "http://localhost:3000/placeholder_bot_companion_item.png"};
         case 14:
-            return "weaponMain";
+            return {type: "weaponMain", sprite: ""};
         case 15:
-            return "weaponOff";
+            return {type: "weaponOff", sprite: ""};
         case 16:
-            return "mount";
+            return { 
+                    type: "mount", 
+                    sprite: {
+                        base: "https://dummyimage.com/256/ff00b7/fff.png&text=mount+sprite",
+                        mountHead: "",
+                        mountBody: "",
+                        mountFeet: "",
+                        mountPet: ""
+                    }
+                };
         case 17:
-            return "mountHead";
+            return {type: "mountHead", sprite: ""};
         case 18:
-            return "mountBody";
+            return { type: "mountBody", sprite: ""};
         case 19:
-            return "mountFeet";
+            return {type: "mountFeet", sprite: ""};
         case 20:
-            return "mountPet";
+            return {type: "mountPet", sprite: ""};
         default:
             return undefined;
         }        

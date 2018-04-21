@@ -1,0 +1,22 @@
+.sprite-button {
+    display: block;
+    min-width: 256px;
+    min-height: 256px;
+}
+
+.sprite-base {
+    position: relative;
+    z-index: 0;
+}
+
+.sprite-head-item,
+.sprite-hands-item,
+.sprite-chest-item,
+ .sprite-legs-item,
+ .sprite-feet-item,
+ .sprite-companion-item,
+ .sprite-weaponMain-item,
+ .sprite-weaponOff-item {
+    position: absolute;
+    z-index: 10;
+}

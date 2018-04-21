@@ -58,7 +58,7 @@ class CharacterSprites extends Component {
     shouldRenderMount(flag){
         if(flag){
             return (
-                <SpriteButton className="player-sprite"
+                <SpriteButton className="mount-sprite"
                     sprite={this.props.mountSprite}
                     alt="Mount sprite placeholder"
                     onClick={this.mountSpriteClickHandler}
