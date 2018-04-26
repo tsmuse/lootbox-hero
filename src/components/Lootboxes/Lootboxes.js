@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { generateBoxes, generateLootIDs } from "./lootboxLogic";
+import { generateBoxes } from "./lootboxLogic";
 
 
 class Lootboxes extends Component {
     constructor(props){
         super(props);
         this.handleOpenBoxes = this.handleOpenBoxes.bind(this);
-        this.lootID = generateLootIDs();
+        // this.lootID = generateLootIDs();
         this.state = {
             "isLoaded" : false,
             "lootTable" : {}
