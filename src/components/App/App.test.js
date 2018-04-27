@@ -1,7 +1,8 @@
 /* global jest test */
 import React from "react";
 import { shallow } from "enzyme";
-import App from "./App";
+// currently broken because I can't load Phaser except with inline webpack commands
+// import App from "./App";
 
 
 test.skip("renders without crashing", () => {
