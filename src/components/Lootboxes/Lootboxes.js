@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { generateBoxes } from "./lootboxLogic";
+import generateBoxes from "./lootboxLogic";
 
 
 class Lootboxes extends Component {

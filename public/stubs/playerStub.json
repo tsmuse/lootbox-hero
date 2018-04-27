@@ -63,7 +63,7 @@
     },
     "boxesOpened": 0,
     "sprite": {
-        "base": "http://localhost:3000/placeholder_bot.png",
+        "base": "http://localhost:3000/uiAssets/sprites/base/placeholder_bot.png",
         "head": "",
         "chest": "",
         "legs": "",

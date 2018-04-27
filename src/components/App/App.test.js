@@ -4,6 +4,6 @@ import { shallow } from "enzyme";
 import App from "./App";
 
 
-test("renders without crashing", () => {
+test.skip("renders without crashing", () => {
     shallow(<App />);
 });
