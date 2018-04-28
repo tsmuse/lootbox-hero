@@ -71,7 +71,7 @@ class Lootboxes extends Component {
                     <ul className="loot-list">
                         {boxToRender.map(function (item, index) {
                             return (
-                                <li className="loot-item" key={`item_${index}`}>
+                                <li className="loot-item unopenedBox" key={`item_${index}`}>
                                     <h2 className="item-label">{`Item ${index + 1}`}</h2>
                                     <div className="item-card">
                                         <h3 className="item-name">{item.name}</h3>

@@ -1,5 +1,25 @@
+@keyframes slots {
+    from {
+        background-position-y: 0px;
+    }
+    to {
+        background-position-y: -3072px;
+    }
+}
 .lootboxes {
     padding: 1rem;
+}
+
+.unopenedBox {
+    background-image: url("http://localhost:3000/uiAssets/testReel.png");
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    animation: slots 0.9s steps(6) 10;
+
+    .item-label,
+    .item-card {
+        display: none;
+    }
 }
 
 .loot-list {
@@ -13,9 +33,9 @@
 }
 
 .loot-item {
-    flex: 1 0 300px;
+    flex: 0 0 512px;
     padding: 1rem;
-    max-width: 500px;
+    min-height: 512px;
 
     .item-label {
         font-size: 1.1rem;

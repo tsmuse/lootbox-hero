@@ -275,8 +275,23 @@ button {
   position: absolute;
   z-index: 10; }
 
+@keyframes slots {
+  from {
+    background-position-y: 0px; }
+  to {
+    background-position-y: -3072px; } }
+
 .lootboxes {
   padding: 1rem; }
+
+.unopenedBox {
+  background-image: url("http://localhost:3000/uiAssets/testReel.png");
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  animation: slots 0.9s steps(6) 10; }
+  .unopenedBox .item-label,
+  .unopenedBox .item-card {
+    display: none; }
 
 .loot-list {
   margin: 0 auto;
@@ -287,9 +302,9 @@ button {
   justify-content: center; }
 
 .loot-item {
-  flex: 1 0 300px;
+  flex: 0 0 512px;
   padding: 1rem;
-  max-width: 500px; }
+  min-height: 512px; }
   .loot-item .item-label {
     font-size: 1.1rem;
     text-align: center;
