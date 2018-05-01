@@ -10,16 +10,53 @@
     padding: 1rem;
 }
 
-.unopenedBox {
+// This isn't working because the random values are only generated when the Sass gets
+// processed, which would be awersome if I was compiling it on the server at request, but I'm not
+// so the random values are going to have to go inline (yuck) in the JS. 
+.unopenedBox-0,
+.unopenedBox-1,
+.unopenedBox-2,
+.unopenedBox-3,
+.unopenedBox-4 {
     background-image: url("http://localhost:3000/uiAssets/testReel.png");
     background-repeat: no-repeat;
-    background-position: 0px 0px;
-    animation: slots 0.9s steps(6) 10;
-
+    
     .item-label,
     .item-card {
         display: none;
     }
+}
+
+.unopenedBox-0 {
+    background-position-x: 0px;
+    background-position-y: ((random(7)-1)) * -512px;
+    animation: slots 0.9s steps(6) (random(5) * 2);
+}
+.unopenedBox-1 {
+    background-position-x: 0px;
+    background-position-y: ((random(7)-1)) * -512px;
+    animation: slots 0.9s steps(6) (random(5) * 2);
+}
+.unopenedBox-2 {
+    background-position-x: 0px;
+    background-position-y: ((random(7)-1)) * -512px;
+    animation: slots 0.9s steps(6) (random(5) * 2);
+}
+.unopenedBox-3 {
+    background-position-x: 0px;
+    background-position-y: ((random(7)-1)) * -512px;
+    animation: slots 0.9s steps(6) (random(5) * 2);
+}
+.unopenedBox-4 {
+    background-position-x: 0px;
+    background-position-y: ((random(7)-1)) * -512px;
+    animation: slots 0.9s steps(6) (random(5) * 2);
+}
+
+.loot-item-button {
+    display: block;
+    width: 100%;
+    min-height: 100%;
 }
 
 .loot-list {
