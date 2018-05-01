@@ -15,18 +15,56 @@ describe("test name and description generation", ()=>{
             "Credit Score"
         ],
             modifier = "_str",
-            type = "head",
+            type = LootboxLogic.getItemType(),
             tier = 1,
             title = LootboxLogic.generateNameDesc(modifier, type, tier).name;
         
-        console.log(title);
-        const generatedAttribute = title.split(" ")[3];
+        //console.log(title);
+        const generatedAttribute = title.split("Embiggended ")[1];
+        // console.log(generatedAttribute);
         expect(prettyAttributesDict).toContain(generatedAttribute);
+    });
+    test("prettyItemType value should always be one of the dictionary values", ()=>{
+        const typeDict = {
+            "head": ["Hat", "Helmet", "Beanie", "Hood"],
+            "chest": ["Shirt", "Tunic", "Vest", "Cardigan"],
+            "legs": ["Pants", "Shorts", "Skirt", "Overalls"],
+            "feet": ["Shoes", "Boots", "Flip-flops", "Slippers"],
+            "hands": ["Gloves", "Wraps", "Fingerless-gloves"],
+            "knees": ["Knee-Pads", "Knee-Brace"],
+            "companion": ["Cat", "Rat", "Bat", "Wombat"],
+            "shoulders": ["Paldrons", "Epilettes", "Flowing Cape", "Cloak"],
+            "backpack": ["Backpack", "Purse", "Messenger Bag", "Duffle"],
+            "lbPocket": ["Wallet", "Smartphone", "Pocketwatch", "Pocket Lint", "Chain Wallet"],
+            "weaponMain": ["Sword", "Club", "Megafist", "Knuckles", "Pool Noodle"],
+            "weaponOff": ["Scope", "Hand Sensor", "Shield", "Wet Sponge"],
+            "finger": ["Diamond Ring", "Silver Ring", "Unobtanium Ring", "Class Ring"],
+            "neck": ["Choker", "Gold Chain", "Bike Chain", "Hemp Necklace"],
+            "mount": ["Horse", "Smart Car", "Fixie", "Mythical Beast", "Broomstick"],
+            "mountHead": ["Mount Head"],
+            "mountBody": ["Mount Body"],
+            "mountFeet": ["Mount Feet"],
+            "mountPet": ["Mount Pet"]
+        },
+        modifier = "_str",
+        type = LootboxLogic.getItemType(),
+        tier = 1,
+        title = LootboxLogic.generateNameDesc(modifier, type, tier).name;
+
+        // console.log(title);
+        const generatedType = title.split(" of")[0];
+        expect(typeDict[type]).toContain(generatedType);
+
     });
 });
 
 describe("test sprite generation", () => {
-    test("", () => {
+    test("Only displayable items should have sprites", () => {
+        const type = "backpack",
+            result = LootboxLogic.generateSprite(type);
+        
+        console.log(`type: ${type}, result: ${result}`);
+        expect(result).toBe("");
     });
 });
 

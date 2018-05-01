@@ -167,12 +167,13 @@ export function generateNameDesc(modifier, type, tier){
         "legs" : ["Pants", "Shorts", "Skirt", "Overalls"],
         "feet" : ["Shoes", "Boots", "Flip-flops", "Slippers"],
         "hands" : ["Gloves", "Wraps", "Fingerless-gloves"],
-        "knees" : ["Knee Pads", "Knee Brace"],
+        "knees" : ["Knee-Pads", "Knee-Brace"],
         "companion" : ["Cat", "Rat", "Bat", "Wombat"],
+        "shoulders" : ["Paldrons", "Epilettes", "Flowing Cape", "Cloak"],
         "backpack" : ["Backpack", "Purse", "Messenger Bag", "Duffle"],
         "lbPocket" : ["Wallet", "Smartphone", "Pocketwatch", "Pocket Lint", "Chain Wallet"],
         "weaponMain" : ["Sword", "Club", "Megafist", "Knuckles", "Pool Noodle"],
-        "weaponOff" : ["Scope", "Hand Sensor", "Sheild", "Wet Sponge"],
+        "weaponOff" : ["Scope", "Hand Sensor", "Shield", "Wet Sponge"],
         "finger" : ["Diamond Ring", "Silver Ring", "Unobtanium Ring", "Class Ring"],
         "neck" : ["Choker", "Gold Chain", "Bike Chain", "Hemp Necklace"],
         "mount" : ["Horse", "Smart Car", "Fixie", "Mythical Beast", "Broomstick"],
@@ -195,8 +196,23 @@ export function generateNameDesc(modifier, type, tier){
     let itemName = "",
         itemDesc = "";
     // pick a type
-    let typeList = typeDict[type];
-    let prettyItemType = `${typeList[rolldice(typeList.length) - 1]}`;
+    // Getting random undefineds from both of these lists. Not sure why, still trying to track down
+    // the issue. tests are passing.
+    let typeList;
+    try{
+       typeList = typeDict[type];
+    }
+    catch(e){
+        console.error(`failed to create typeList. modifier: ${modifier}, type: ${type}, tier: ${tier}`);
+    }
+    let prettyItemType;
+    try{
+        prettyItemType = `${typeList[rolldice(typeList.length) - 1]}`;
+    }
+    catch (e) {
+        console.error(`failed to create prettyItemType. modifier: ${modifier}, type: ${type}, tier: ${tier}`);
+    }
+        
     if (pattern === "mount"){
         itemName = prettyItemType;
         itemDesc = `Your mount is like a friend, and this ${prettyItemType} is no exception. What ` 
@@ -466,10 +482,10 @@ export function generateSprite(type){
         item = `${type}0${rolldice(1)}`;
     let sprite = "";
         
-    if(type !== "finger" || type !== "neck" || type !== "knees" || type !== "lbPocket" 
-        || type !== "backpack" || type !== "shoulders" || type !== "mount")
+    if(type !== "finger" && type !== "neck" && type !== "knees" && type !== "lbPocket" 
+        && type !== "backpack" && type !== "shoulders" && type !== "mount")
     {
-        sprite = `${spritePath}${type}/${item}`;
+        sprite = `${spritePath}${type}/${item}.png`;
     }
     else if(type === "mount"){
         sprite = {
@@ -533,8 +549,6 @@ export function getItemType() {
             return "mountFeet";
         case 20:
             return "mountPet";
-        default:
-            return undefined;
     }
 }
 
