@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import generateBoxes from "./lootboxLogic";
 import { rolldice } from "../../Helpers";
+import LootboxStoreItem from "../LootboxStoreItem/LootboxStoreItem";
+import LootboxItemCard from "../LootboxItemCard/LootboxItemCard";
 
 class Lootboxes extends Component {
     constructor(props){
         super(props);
         this.handleOpenBoxes = this.handleOpenBoxes.bind(this);
-        this.handleOpenBox = this.handleOpenBox.bind(this);
+        this.handleOpenItem = this.handleOpenItem.bind(this);
+        this.handleBuyBoxes = this.handleBuyBoxes.bind(this);
         // this.lootID = generateLootIDs();
+        // on the fence about lootBoxStore being a fetch or just being a hardcoded part
+        // of the game...not sure how often it will change
         this.state = {
-            isLoaded : false,
-            lootTable : {},
-            boxItems : []
+            boxItems : [],
+            lootBoxStore: [
+                { boxes: 1, price: 4, title: "Single Lootbox", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
+                { boxes: 5, price: 17, title: "Five Lootbox Pack", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
+                { boxes: 10, price: 32, title: "Ten Lootbox Pack", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
+                { boxes: 50, price: 175, title: "Best Value Pack (50 boxes!!)", img: "https://dummyimage.com/256x128/ff00b7/fff.png"} 
+            ]
         };
     }
     
@@ -19,23 +28,26 @@ class Lootboxes extends Component {
         // mark the lootboxes as opened since we are rendering the lastbox on load
         let initalBoxItems = [];
         for(let loot of this.props.lastBox){
-            let item = { spinning: false, opened: true };
+            let item = { opened: true };
             initalBoxItems.push(item);
         }
-        // this probably should be in a middleware somewhere
-        fetch("http://localhost:3000/stubs/lootTable.json")
-            .then(result => result.json())
-            .then(
-                (result)=>{
-                    this.setState({
-                        boxItems: initalBoxItems,
-                        "lootTable": result,
-                        "isLoaded": true
-                    });
-                },
-                (error) => {
-                    this.setState({error});
-        });
+        this.setState({ boxItems: initalBoxItems});
+        // this probably should be in a middleware somewhere and held in state by the App
+        // removed the loot table for the generator methods in lootboxLogic, but will need this or 
+        // somethign like it again to pull the sets table whern that gets created.
+        // fetch("http://localhost:3000/stubs/lootTable.json")
+        //     .then(result => result.json())
+        //     .then(
+        //         (result)=>{
+        //             this.setState({
+        //                 boxItems: initalBoxItems,
+        //                 "lootTable": result,
+        //                 "isLoaded": true
+        //             });
+        //         },
+        //         (error) => {
+        //             this.setState({error});
+        // });
     }
 
     handleOpenBoxes() {
@@ -43,7 +55,7 @@ class Lootboxes extends Component {
         this.handleNewBoxes(lootbox.length);
         this.props.lootboxChangeHandler(lootbox);
     }
-    handleOpenBox(e) {
+    handleOpenItem(e) {
         console.log(e.currentTarget.dataset.lootId);
         let openedIndex = e.currentTarget.dataset.lootId;
         this.setState((prevState, props) => {
@@ -53,6 +65,11 @@ class Lootboxes extends Component {
             return newState;
         });
     }
+    handleBuyBoxes(e){
+        let purchase = this.state.lootBoxStore[e.currentTarget.dataset.storeId];
+        this.props.buyLootboxHandler(purchase.price, purchase.boxes);
+    }
+
     handleNewBoxes(boxCount){
         let newOpenBoxes = [];
         for(let i = 0; i < boxCount; i++){
@@ -63,98 +80,71 @@ class Lootboxes extends Component {
 
     render(){
         const boxToRender = this.props.lastBox,
-            { error, isLoaded } = this.state;
-        if(error){
-            return <div> Error {error.message} </div>;
-        }
-        else if(!isLoaded){
-            return <div> Loading loot tables...</div>;
-        }
-        else{
-            return (
-                <section className="lootboxes">
-                    <div className="lootboxes-stats-group">
-                        <table className="lootboxes-stats-table">
-                            <tbody>
-                                <tr className="lootboxes-stats-row">
-                                    <td className="lootboxes-stats-label">Unopened boxes</td>
-                                    <td className="lootboxes-stats-value">{this.props.playerUnopenedBoxes}</td>
-                                </tr>
-                                <tr className="lootboxes-stats-row">
-                                    <td className="lootboxes-stats-label">Cash</td>
-                                    <td className="lootboxes-stats-value">{this.props.playerCash}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            boxItems = this.state.boxItems;
+        return (
+            <section className="lootboxes">
+                <div className="lootbox-store">
+                    <div className="lootbox-stats-group">
+                        <div className="lootbox-stats-row">
+                            <p className="lootbox-stats-label">Cash</p>
+                            <p className="lootbox-stats-value">{this.props.playerCash}</p>
+                        </div>
+                        <div className="lootbox-stats-row">
+                            <p className="lootbox-stats-label">Unopened boxes</p>
+                            <p className="lootbox-stats-value">{this.props.playerUnopenedBoxes}</p>
+                        </div>
                     </div>
-                    <div className="lootboxes-button-group">
-                        <button className="open-boxes-btn" onClick={this.handleOpenBoxes}
-                            disabled={this.props.playerUnopenedBoxes === 0} >
-                            Open Boxes
-                        </button>
-                        <button className="buy-boxes-btn"
-                            onClick={this.props.buyLootboxHandler}
-                            disabled={this.props.playerCash < 3}>
-                            Buy Box
-                        </button>
-                    </div>
-                    {/* 
-                        TODO: give each box an id that is the index representing the box in the
-                        boxeOpened array in state, set the unopened-box class conditional to 
-                        the value in state, pass in random values for animation-iteration-count
-                        and background-position-y here, so they will be regenerated each time instead
-                        of when the Sass is compiled like they are right now.    
-                    */}
+                    <ul className="lootbox-store-scroll-container">
+                        {this.state.lootBoxStore
+                            .map(function buildStoreListings(listing, index){
+                                return (
+                                    <LootboxStoreItem 
+                                        itemImg={listing.img}
+                                        itemTitle={listing.title}
+                                        itemPrice={listing.price}
+                                        itemClickHandler={this.handleBuyBoxes}
+                                        playerCash = {this.props.playerCash}
+                                        index={index}
+                                        key={`lootbox-store-${index}`}
+                                    />
+                                );
+                            }, this)
+                        }
+                    </ul>
+                </div>
+                <div className="lootboxes-button-group">
+                    <button className="open-boxes-btn" onClick={this.handleOpenBoxes}
+                        disabled={this.props.playerUnopenedBoxes === 0} >
+                        Open a Box
+                    </button>
+                </div>
+                <div className="loot-show-area">
                     <ul className="loot-list">
                         {boxToRender.map(function (item, index) {
-                            const randomCSS = {
+                            const backgroundCSS = {
                                 backgroundPositionY: `${(rolldice(6) - 1) * -512}px` 
                             },
-                                itemClickHandler = this.state.boxItems[index].opened 
+                                cardClickHandler = boxItems.length > 0 && boxItems[index].opened 
                                     ? ()=>{} 
-                                    : this.handleOpenBox;
+                                    : this.handleOpenItem;
                             let classes = "loot-item";
-                            if (this.state.boxItems[index].spinning){
-                                classes += " spinning";
-                                setTimeout(()=>{
-                                    this.setState((prevState, props)=>{
-                                        let newState = prevState;
-                                        newState.boxItems[index].spinning = false;
-                                        return newState;
-                                    });
-                                }, rolldice(8) * 500);
-                            }
                             if (!this.state.boxItems[index].opened)
                                 classes += " unopenedBox";
                             return (
-                                <li className={classes} 
-                                    key={`item_${index}`} 
-                                    style={randomCSS}
-                                    onAnimationStart={()=>{}}
-                                >
-                                    <a className="loot-item-button" 
-                                        onClick={itemClickHandler}
-                                        data-loot-id={index}
-                                    >
-                                        <img className="item-image" 
-                                            src={item.icon} alt={`${item.name} sprite image`} 
-                                        />
-                                        <h2 className="item-label">{`Item ${index + 1}`}</h2>
-                                        <div className="item-card">
-                                            <h3 className="item-name">{item.name}</h3>
-                                            <p className="item-desc">{item.desc}</p>
-                                        </div>
-                                    </a>
-                                </li>
+                                <LootboxItemCard 
+                                    randomBackground={backgroundCSS}
+                                    handleCardClick={cardClickHandler}
+                                    lootId={index}
+                                    lootItem={item}
+                                    lootOpened= {boxItems[index].opened}
+                                /> 
                             );
                         }, this)}
                     </ul>
-                </section>
-            );
-        }
+                </div>
+            </section>
+        );
     }
-
-    
 }
 
 export default Lootboxes;

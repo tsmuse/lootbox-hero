@@ -1,0 +1,43 @@
+.loot-item {
+    flex: 0 0 256px;
+    min-height:256px;
+    padding: 1rem;
+    justify-content: space-evenly;
+    cursor: pointer;
+
+    .item-label {
+        font-size: 1.1rem;
+        text-align: center;
+        margin: 0 0 0.5rem;
+    }
+}
+
+.loot-item-button {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+}
+.item-card {
+    border: $item-card-border;
+    padding: 1rem;
+    min-height: 175px;
+    
+    .item-name {
+        font-size: 1.2rem;
+        margin: 0 0 0.75rem;
+    }
+
+    .item-desc {
+        margin: 0;
+    }
+    item-image {
+        width: 100%;
+    }
+}
+
+.open {
+    display: block;
+}
+.closed {
+    display: none;
+}

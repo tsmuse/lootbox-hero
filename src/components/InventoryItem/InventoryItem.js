@@ -1,5 +1,6 @@
 import React from "react";
 
+// TODO: need to add details accordion to each item
 function InventoryItem(props) {
     const { loot } = props;
     const stats = loot.stats;

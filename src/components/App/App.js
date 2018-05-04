@@ -189,13 +189,13 @@ class App extends Component {
 
     }
 
-    handleBuyLootbox() {
+    handleBuyLootbox(price, boxes) {
         // this will eventually need to move into the lootbox buy component that will be 
         // the real buy screen
         this.setState(function (prevState, props) {
             var newState = this.rebuildPlayer(prevState);
-            newState.player.currency.cash -= 3;
-            newState.player.currency.unopenedBoxes += 1;
+            newState.player.currency.cash -= price;
+            newState.player.currency.unopenedBoxes += boxes;
             newState = this.updateScore(newState);
             return newState;
         });

@@ -97,9 +97,10 @@ export default function generateBoxes() {
 // Function: buildNewItem(item) - an item factory function that takes am item object that has only
 //           a tier value and creates a fully functioning loot item object.
 export function buildNewItem(item) {
-    const type = getItemType(),
+    const typeRoll = rolldice(20);
+    const type = getItemType(typeRoll),
         iconPath = "http://localhost:3000/uiAssets/icons/loot/";
-
+    console.log(`typeRoll: ${typeRoll}, type: ${type}`);
     item["equipped"] = false;
     item["type"] = type;
     if (type === "mount") {
@@ -110,6 +111,8 @@ export function buildNewItem(item) {
     }
     //item["icon"] = `${iconPath}${type}.png`;
     item["icon"] = "https://dummyimage.com/64/ff00b7/fff.png";
+    //item["lootCardIcon"] = `${iconPath}${type}_lootcard.png`;
+    item["lootCardIcon"] = "https://dummyimage.com/256x128/ff00b7/fff.png";
     // check to see if it should be a set item from the set table
     // if yes, build from the set table instead of the generic item algorithm 
     if(rolldice(20) === 20){
@@ -505,9 +508,7 @@ export function generateSprite(type){
 //          (7)Feet, (8)Neck, (9)Finger 1, (10) Finger 2, (11) Left-back pocket, (12) Backpack, 
 //          (13) Companion pet, (14) Weapon-main, (15) Weapon-off, (16) Mount, (17)Mount-head,
 //          (18)Mount-body, (19)Mount-feet, (20)Mount-pet 
-export function getItemType() {
-    const lootType = rolldice(20);
-
+export function getItemType(lootType) {
     switch (lootType) {
         case 1:
             return "head";

@@ -1,6 +1,6 @@
 /* global jest test */
 import *  as LootboxLogic from "./lootboxLogic";
-import { currentId } from "async_hooks";
+// import { currentId } from "async_hooks";
 
 describe("test name and description generation", ()=>{
     test("prettyStat value should always be one of the dictonary values", ()=>{
@@ -15,7 +15,7 @@ describe("test name and description generation", ()=>{
             "Credit Score"
         ],
             modifier = "_str",
-            type = LootboxLogic.getItemType(),
+            type = LootboxLogic.getItemType(20),
             tier = 1,
             title = LootboxLogic.generateNameDesc(modifier, type, tier).name;
         
@@ -47,7 +47,7 @@ describe("test name and description generation", ()=>{
             "mountPet": ["Mount Pet"]
         },
         modifier = "_str",
-        type = LootboxLogic.getItemType(),
+        type = LootboxLogic.getItemType(20),
         tier = 1,
         title = LootboxLogic.generateNameDesc(modifier, type, tier).name;
 
