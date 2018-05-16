@@ -5,7 +5,9 @@ class LootboxStoreItem extends Component{
         const { itemImg, itemTitle, itemPrice, itemClickHandler, playerCash, index } = this.props;
         return(
             <li className="lootbox-store-item">
-                <img className="lootbox-store-img" src={itemImg} alt="loot item" />
+                <div className="lootbox-store-img">
+                    <img src={itemImg} alt="single lootbox"/>
+                </div>
                 <h2 className="lootbox-store-item-title">{itemTitle}</h2>
                 <button className="lootbox-store-buy-btn"
                     onClick={itemClickHandler}

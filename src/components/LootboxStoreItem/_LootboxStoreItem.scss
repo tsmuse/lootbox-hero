@@ -11,6 +11,10 @@
     &-img {
         flex: 0;
         margin: 0 auto 0.5rem;
+
+        img {
+            width: 100%;
+        }
     }
     &-item-title {
         flex: 1 0 50px;

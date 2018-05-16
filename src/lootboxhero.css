@@ -369,6 +369,8 @@ button {
 .lootbox-store-img {
   flex: 0;
   margin: 0 auto 0.5rem; }
+  .lootbox-store-img img {
+    width: 100%; }
 
 .lootbox-store-item-title {
   flex: 1 0 50px;

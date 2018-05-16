@@ -16,7 +16,7 @@ class Lootboxes extends Component {
         this.state = {
             boxItems : [],
             lootBoxStore: [
-                { boxes: 1, price: 4, title: "Single Lootbox", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
+                { boxes: 1, price: 4, title: "Single Lootbox", img: "http://localhost:3000/uiAssets/Lootbox_2.png"},
                 { boxes: 5, price: 17, title: "Five Lootbox Pack", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
                 { boxes: 10, price: 32, title: "Ten Lootbox Pack", img: "https://dummyimage.com/256x128/ff00b7/fff.png"},
                 { boxes: 50, price: 175, title: "Best Value Pack (50 boxes!!)", img: "https://dummyimage.com/256x128/ff00b7/fff.png"} 
